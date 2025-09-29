@@ -8,17 +8,17 @@ import { ErrorService } from '../shared/error.service';
 @Injectable({
   providedIn: 'root',
 })
-export class PlacesService {
+export class MoviesService {
   private errorService = inject(ErrorService);
   private httpClient = inject(HttpClient);
   // private userPlaces = signal<Place[]>([]);
 
   // loadedUserPlaces = this.userPlaces.asReadonly();
 
-  loadAvailablePlaces() {
-    return this.fetchPlaces(
-      'http://localhost:3000/places',
-      'Something went wrong fetching available places'
+  loadPopularMovies() {
+    return this.fetchMovies(
+      'http://localhost:5000/api/movies/popular?page=1',
+      'Something went wrong fetching popular movies'
     );
   }
 
@@ -72,11 +72,11 @@ export class PlacesService {
   //     );
   // }
 
-  private fetchPlaces(url: string, errorMessage: string) {
+  private fetchMovies(url: string, errorMessage: string) {
     return this.httpClient
-      .get<{ movies: Movie[] }>(url) //we can add a pipe at this step
+      .get<{ results: Movie[] }>(url) //we can add a pipe at this step
       .pipe(
-        map((resData) => resData.movies),
+        map((resData) => resData.results),
         catchError((error) => {
           console.log(error);
           return throwError(() => new Error(errorMessage));

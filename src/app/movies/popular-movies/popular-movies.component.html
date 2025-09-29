@@ -1,0 +1,14 @@
+<app-movies-container title="Popular Movies">
+  @if (isFetching() && !error()) {
+    <p class="fallback-text">Fetching movies..</p>
+  }
+
+  @if (error()) {
+    <p class="fallback-text">{{ error() }}</p>
+  }
+  @if (movies()) {
+  <app-movies [movies]="movies()!" (selectMovie)="onSelectMovie($event)"/>
+  } @else if (movies()?.length === 0) {
+  <p class="fallback-text">Unfortunately, no popular movies could be found.</p>
+  }
+</app-movies-container>

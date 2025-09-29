@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 
-import { AvailablePlacesComponent } from './places/available-places/available-places.component';
-import { UserPlacesComponent } from './places/user-places/user-places.component';
+import { PopularMoviesComponent } from './movies/popular-movies/popular-movies.component';
 import { ErrorService } from './shared/error.service';
 import { ErrorModalComponent } from './shared/modal/error-modal/error-modal.component';
 
@@ -10,7 +9,7 @@ import { ErrorModalComponent } from './shared/modal/error-modal/error-modal.comp
   standalone: true,
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
-  imports: [AvailablePlacesComponent, UserPlacesComponent, ErrorModalComponent],
+  imports: [PopularMoviesComponent, ErrorModalComponent],
 })
 export class AppComponent {
   private errorService = inject(ErrorService);
