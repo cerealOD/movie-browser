@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 
 import { Movie } from './movie.model';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { ErrorService } from '../shared/error.service';
 
@@ -17,7 +18,7 @@ export class MoviesService {
 
   loadPopularMovies() {
     return this.fetchMovies(
-      'http://localhost:5000/api/movies/popular?page=1',
+      `${environment.apiUrl}/movies/popular?page=1`,
       'Something went wrong fetching popular movies'
     );
   }
