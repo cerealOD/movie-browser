@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 
-import { Movie } from './movie.model';
+import { Movie } from '../movies/movie.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { catchError, map, tap, throwError } from 'rxjs';

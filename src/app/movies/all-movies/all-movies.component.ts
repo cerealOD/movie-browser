@@ -4,7 +4,7 @@ import { MoviesComponent } from '../movies.component';
 import { MoviesContainerComponent } from '../movies-container/movies-container.component';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, throwError } from 'rxjs';
-import { MoviesService } from '../movies.service';
+import { MoviesService } from '../../services/movies.service';
 @Component({
   selector: 'app-all-movies',
   standalone: true,

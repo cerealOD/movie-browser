@@ -1,12 +1,45 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
 })
 export class LoginComponent {
+  private auth = inject(AuthService);
 
+  form = new FormGroup({
+    username: new FormControl('', {
+      validators: [Validators.required],
+    }),
+    password: new FormControl('', {
+      validators: [Validators.minLength(6), Validators.required],
+    }),
+  });
+
+  onSubmit() {
+    const username = this.form.value.username!;
+    const password = this.form.value.password!;
+
+    this.auth.login(username, password).subscribe({
+      next: (res) => {
+        console.log('Logged in:', res);
+        // alert('Login successful!');
+      },
+      error: (err) => {
+        console.error(err);
+        // alert(err.error?.error || 'Login failed');
+      },
+    });
+  }
 }
