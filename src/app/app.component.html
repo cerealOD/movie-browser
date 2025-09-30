@@ -1,10 +1,14 @@
 @if (error()) {
   <app-error-modal title="An error occured" [message]="error()"></app-error-modal>
 }
-<header>
+<app-header>
   <h1>Movie Browser</h1>
-</header>
+</app-header>
 
-<main>
-  <app-popular-movies />
+<main class="my-16 container mx-auto">
+  <router-outlet/>
 </main>
+
+<app-footer>
+
+</app-footer>

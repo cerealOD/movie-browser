@@ -8,6 +8,12 @@ import {
   provideHttpClient,
   withInterceptors,
 } from '@angular/common/http';
+import {
+  provideRouter,
+  withComponentInputBinding,
+  withRouterConfig,
+} from '@angular/router';
+import { routes } from './app/app.routes';
 import { tap } from 'rxjs';
 
 function loggingInterceptor(
@@ -31,5 +37,14 @@ function loggingInterceptor(
 }
 
 bootstrapApplication(AppComponent, {
-  providers: [provideHttpClient(withInterceptors([loggingInterceptor]))],
+  providers: [
+    provideRouter(
+      routes,
+      withComponentInputBinding(),
+      withRouterConfig({
+        paramsInheritanceStrategy: 'always',
+      })
+    ),
+    provideHttpClient(withInterceptors([loggingInterceptor])),
+  ],
 }).catch((err) => console.error(err));
