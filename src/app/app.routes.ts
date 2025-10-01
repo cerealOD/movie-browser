@@ -8,7 +8,7 @@ import {
 } from '@angular/router';
 
 import { inject } from '@angular/core';
-import { PopularMoviesComponent } from './movies/popular-movies/popular-movies.component';
+import { CategoricalMoviesComponent } from './movies/categorical-movies/categorical-movies.component';
 import { AllMoviesComponent } from './movies/all-movies/all-movies.component';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
@@ -56,19 +56,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: 'popular',
-    component: PopularMoviesComponent,
-  },
-  {
-    path: 'top-rated',
-    component: PopularMoviesComponent,
-  },
-  {
-    path: 'now-playing',
-    component: PopularMoviesComponent,
-  },
-  {
-    path: 'upcoming',
-    component: PopularMoviesComponent,
+    path: 'movies/:category',
+    component: CategoricalMoviesComponent,
   },
 ];

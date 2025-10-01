@@ -1,4 +1,4 @@
-<app-movies-container title="Popular Moviessss">
+<app-movies-container title="{{ category() | titleize}}">
   @if (isFetching() && !error()) {
     <p class="fallback-text">Fetching movies..</p>
   }

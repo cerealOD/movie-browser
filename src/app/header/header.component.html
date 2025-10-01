@@ -3,16 +3,16 @@
     <div class="flex items-center">
       <a [routerLink]="['/']" class="text-white text-3xl font-semibold">Movie Browser</a>
       <div class="ml-16 flex items-center gap-x-8">
-        <a class="font-semibold text-white text-lg" [routerLink]="['/popular']" routerLinkActive="selected">
+        <a class="font-semibold text-white text-lg" [routerLink]="['movies/popular']" routerLinkActive="selected">
           <span>Popular</span>
         </a>
-        <a class="font-semibold text-white text-lg" [routerLink]="['/top-rated']" routerLinkActive="selected">
+        <a class="font-semibold text-white text-lg" [routerLink]="['movies/top-rated']" routerLinkActive="selected">
           <span>Top Rated</span>
         </a>
-        <a class="font-semibold text-white text-lg" [routerLink]="['/now-playing']" routerLinkActive="selected">
-          <span>Now playing</span>
+        <a class="font-semibold text-white text-lg" [routerLink]="['movies/now-playing']" routerLinkActive="selected">
+          <span>Now Playing</span>
         </a>
-        <a class="font-semibold text-white text-lg" [routerLink]="['/upcoming']" routerLinkActive="selected">
+        <a class="font-semibold text-white text-lg" [routerLink]="['movies/upcoming']" routerLinkActive="selected">
           <span>Upcoming</span>
         </a>
       </div>

@@ -22,23 +22,23 @@ export class AllMoviesComponent implements OnInit {
   ngOnInit() {
     this.isFetching.set(true);
     //the backend provides an observable to which we need to sub
-    const subscription = this.moviesService.loadPopularMovies().subscribe({
-      next: (movies) => {
-        console.log(movies);
-        this.movies.set(movies);
-      },
-      error: (error: Error) => {
-        // to get the original error message
-        this.error.set(error.message);
-        // this.error.set('Something went wrong fetching data');
-      },
-      complete: () => {
-        this.isFetching.set(false);
-      },
-    });
-    this.destroyRef.onDestroy(() => {
-      subscription.unsubscribe();
-    });
+    // const subscription = this.moviesService.loadPopularMovies().subscribe({
+    //   next: (movies) => {
+    //     console.log(movies);
+    //     this.movies.set(movies);
+    //   },
+    //   error: (error: Error) => {
+    //     // to get the original error message
+    //     this.error.set(error.message);
+    //     // this.error.set('Something went wrong fetching data');
+    //   },
+    //   complete: () => {
+    //     this.isFetching.set(false);
+    //   },
+    // });
+    // this.destroyRef.onDestroy(() => {
+    //   subscription.unsubscribe();
+    // });
   }
 
   //send some data to the backend

@@ -6,37 +6,49 @@ import { MoviesContainerComponent } from '../movies-container/movies-container.c
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, throwError } from 'rxjs';
 import { MoviesService } from '../../services/movies.service';
+import { ActivatedRoute } from '@angular/router';
+import { TitleizePipe } from '../../pipes/titleize.pipe';
 
 @Component({
   selector: 'app-popular-movies',
   standalone: true,
-  templateUrl: './popular-movies.component.html',
-  styleUrl: './popular-movies.component.css',
-  imports: [MoviesComponent, MoviesContainerComponent],
+  templateUrl: './categorical-movies.component.html',
+  styleUrl: './categorical-movies.component.css',
+  imports: [MoviesComponent, MoviesContainerComponent, TitleizePipe],
 })
-export class PopularMoviesComponent implements OnInit {
+export class CategoricalMoviesComponent implements OnInit {
   movies = signal<Movie[] | undefined>(undefined);
+  category = signal<string>('');
   isFetching = signal(false);
   error = signal('');
   private moviesService = inject(MoviesService);
+  private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
 
   ngOnInit() {
     this.isFetching.set(true);
     //the backend provides an observable to which we need to sub
-    const subscription = this.moviesService.loadPopularMovies().subscribe({
-      next: (movies) => {
-        console.log(movies);
-        this.movies.set(movies);
-      },
-      error: (error: Error) => {
-        // to get the original error message
-        this.error.set(error.message);
-        // this.error.set('Something went wrong fetching data');
-      },
-      complete: () => {
-        this.isFetching.set(false);
-      },
+    const subscription = this.route.paramMap.subscribe((params) => {
+      const category = params.get('category');
+
+      if (!category) return;
+
+      this.category.set(category);
+
+      this.moviesService.loadCategoricalMovies(category).subscribe({
+        next: (movies) => {
+          console.log(movies);
+          this.movies.set(movies);
+        },
+        error: (error: Error) => {
+          // to get the original error message
+          this.error.set(error.message);
+          // this.error.set('Something went wrong fetching data');
+        },
+        complete: () => {
+          this.isFetching.set(false);
+        },
+      });
     });
     this.destroyRef.onDestroy(() => {
       subscription.unsubscribe();

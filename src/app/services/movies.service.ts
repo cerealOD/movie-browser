@@ -16,9 +16,9 @@ export class MoviesService {
 
   // loadedUserPlaces = this.userPlaces.asReadonly();
 
-  loadPopularMovies() {
+  loadCategoricalMovies(category: string) {
     return this.fetchMovies(
-      `${environment.apiUrl}/movies/popular?page=1`,
+      `${environment.apiUrl}/movies/${category}?page=1`,
       'Something went wrong fetching popular movies'
     );
   }
