@@ -7,6 +7,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+import { HeaderService } from '../../services/header.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +18,9 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
+  private router = inject(Router);
   private auth = inject(AuthService);
+  private headerService = inject(HeaderService);
 
   form = new FormGroup({
     username: new FormControl('', {
@@ -34,6 +38,8 @@ export class LoginComponent {
     this.auth.login(username, password).subscribe({
       next: (res) => {
         console.log('Logged in:', res);
+        this.headerService.close();
+        this.router.navigate(['/']);
         // alert('Login successful!');
       },
       error: (err) => {

@@ -1,0 +1,19 @@
+.form-container {
+  @apply shadow-lg rounded-2xl bg-secondary p-6 w-[360px];
+
+  h2 {
+    @apply text-primary text-center text-2xl font-semibold mb-8;
+  }
+
+  .form-label{
+    @apply text-primary text-sm font-medium;
+  }
+
+  .form-input{
+    @apply shadow-md p-2 rounded-lg h-10 bg-white bg-opacity-70;
+  }
+
+  .form-submit {
+    @apply w-full mt-8 shadow-lg px-4 py-3 bg-primary rounded-lg text-white font-semibold hover:bg-opacity-70 disabled:bg-opacity-50 disabled:text-opacity-50;
+  }
+}

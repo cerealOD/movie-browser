@@ -12,13 +12,12 @@ import { ErrorService } from '../shared/error.service';
 export class MoviesService {
   private errorService = inject(ErrorService);
   private httpClient = inject(HttpClient);
-  // private userPlaces = signal<Place[]>([]);
 
   // loadedUserPlaces = this.userPlaces.asReadonly();
 
-  loadCategoricalMovies(category: string) {
+  loadCategoricalMovies(category: string, page: number = 1) {
     return this.fetchMovies(
-      `${environment.apiUrl}/movies/${category}?page=1`,
+      `${environment.apiUrl}/movies/${category}?page=${page}`,
       'Something went wrong fetching popular movies'
     );
   }
@@ -75,9 +74,13 @@ export class MoviesService {
 
   private fetchMovies(url: string, errorMessage: string) {
     return this.httpClient
-      .get<{ results: Movie[] }>(url) //we can add a pipe at this step
+      .get<{
+        page: number;
+        results: Movie[];
+        total_pages: number;
+        total_results: number;
+      }>(url) //we can add a pipe at this step
       .pipe(
-        map((resData) => resData.results),
         catchError((error) => {
           console.log(error);
           return throwError(() => new Error(errorMessage));

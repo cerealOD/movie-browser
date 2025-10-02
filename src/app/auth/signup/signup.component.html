@@ -1,22 +1,22 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="shadow-lg rounded-2xl bg-[#8580a2] p-6 w-[360px]">
-  <h2 class="text-[#1F1C2C] text-center text-2xl font-semibold mb-8">Create an account</h2>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-container">
+  <h2>Create an account</h2>
 
   <div class="flex flex-col gap-4">
     <div class="flex flex-col gap-2">
-      <label class="text-[#1F1C2C] text-sm font-medium" for="username">Username*</label>
-      <input class="shadow-md p-2 rounded-lg h-10 bg-white bg-opacity-70" id="username" type="username" [formControl]="form.controls.username" placeholder="Choose a username" />
+      <label class="form-label" for="username">Username*</label>
+      <input class="form-input" id="username" type="username" [formControl]="form.controls.username" placeholder="Choose a username" />
     </div>
 
     <div class="flex flex-col gap-4" formGroupName="passwords">
       <div class="flex flex-col gap-2">
-        <label class="text-[#1F1C2C] text-sm font-medium" for="password">Password*</label>
-        <input class="shadow-md p-2 rounded-lg h-10 bg-white bg-opacity-70" id="password" type="password" name="password" formControlName="password" placeholder="Password"
+        <label class="form-label" for="password">Password*</label>
+        <input class="form-input" id="password" type="password" name="password" formControlName="password" placeholder="Password"
         />
       </div>
 
       <div class="flex flex-col gap-2">
-        <label class="text-[#1F1C2C] text-sm font-medium" for="confirm-password">Confirm Password*</label>
-        <input class="shadow-md p-2 rounded-lg h-10 bg-white bg-opacity-70" id="confirm-password" type="password"  name="confirm-password" formControlName="confirmPassword" placeholder="Password again"
+        <label class="form-label" for="confirm-password">Confirm Password*</label>
+        <input class="form-input" id="confirm-password" type="password"  name="confirm-password" formControlName="confirmPassword" placeholder="Password again"
         />
       </div>
       @if(form.dirty && form.touched && form.invalid){
@@ -24,6 +24,6 @@
       }
     </div>
   </div>
-  <button class="w-full mt-8 shadow-lg px-4 py-3 bg-[#1F1C2C] rounded-lg text-white font-semibold hover:bg-opacity-70" [disabled]="form.invalid">Sign Up</button>
+  <button class="form-submit" [disabled]="form.invalid">Sign Up</button>
 
 </form>

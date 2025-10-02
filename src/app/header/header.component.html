@@ -3,28 +3,53 @@
     <div class="flex items-center">
       <a [routerLink]="['/']" class="text-white text-3xl font-semibold">Movie Browser</a>
       <div class="ml-16 flex items-center gap-x-8">
-        <a class="font-semibold text-white text-lg" [routerLink]="['movies/popular']" routerLinkActive="selected">
+        <a class="nav-link" [routerLink]="['movies/popular']" routerLinkActive="selected">
           <span>Popular</span>
         </a>
-        <a class="font-semibold text-white text-lg" [routerLink]="['movies/top-rated']" routerLinkActive="selected">
+        <a class="nav-link" [routerLink]="['movies/top-rated']" routerLinkActive="selected">
           <span>Top Rated</span>
         </a>
-        <a class="font-semibold text-white text-lg" [routerLink]="['movies/now-playing']" routerLinkActive="selected">
+        <a class="nav-link" [routerLink]="['movies/now-playing']" routerLinkActive="selected">
           <span>Now Playing</span>
         </a>
-        <a class="font-semibold text-white text-lg" [routerLink]="['movies/upcoming']" routerLinkActive="selected">
+        <a class="nav-link" [routerLink]="['movies/upcoming']" routerLinkActive="selected">
           <span>Upcoming</span>
         </a>
       </div>
     </div>
     @if (auth.isLoggedIn$ | async; ) {
-      <button (click)="logout()">Logout</button>
+      <div class="relative" #dropdownWrapper>
+        <button (click)="toggleDropdown($event)" class="bg-secondary text-primary  font-medium rounded-full w-10 h-10 flex items-center justify-center">{{initial()}}</button>
+        @if (headerService.dropdownOpen()) {
+          <div
+            class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg z-50"
+          >
+            <ul class="text-sm text-gray-700">
+              <li>
+                <a class="rounded-t-xl profile-link">
+                  Profile Settings
+                </a>
+              </li>
+              <li>
+                <a class="profile-link">
+                  Watchlists
+                </a>
+              </li>
+              <li>
+                <a class="rounded-b-xl block px-4 py-2 text-red-600 hover:bg-red-100 cursor-pointer" (click)="logout()">
+                  Log Out
+                </a>
+              </li>
+            </ul>
+          </div>
+        }
+      </div>
     } @else {
       <div class="flex items-center gap-x-8">
-        <a [routerLink]="['/login']" class="rounded-lg border border-solid border-white px-4 py-2 text-white font-semibold">
+        <a [routerLink]="['/login']" class="shadow-lg rounded-lg bg-white px-4 py-2 text-primary font-semibold">
           Log In
         </a>
-        <a [routerLink]="['/register']" class="rounded-lg border border-solid border-white px-4 py-2 text-white font-semibold">
+        <a [routerLink]="['/register']" class="shadow-lg rounded-lg bg-secondary text-primary px-4 py-2 text-white font-semibold">
           Sign Up
         </a>
       </div>

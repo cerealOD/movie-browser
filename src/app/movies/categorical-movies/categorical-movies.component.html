@@ -1,14 +1,36 @@
-<app-movies-container title="{{ category() | titleize}}">
+<app-movies-container title="{{ category() | titleize}} Movies">
   @if (isFetching() && !error()) {
     <p class="fallback-text">Fetching movies..</p>
   }
 
   @if (error()) {
-    <p class="fallback-text">{{ error() }}</p>
+    <p class="mt-4 fallback-text">{{ error() }}</p>
   }
   @if (movies()) {
   <app-movies [movies]="movies()!" (selectMovie)="onSelectMovie($event)"/>
+
+  <div class="flex justify-center gap-2 mt-6">
+    <button
+      (click)="prevPage()"
+      [disabled]="currentPage() === 1"
+      class="px-4 py-2 bg-gray-700 text-white rounded disabled:opacity-50"
+    >
+      Prev
+    </button>
+
+    <span class="px-4 py-2">
+      Page {{ currentPage() }} of {{ totalPages() }}
+    </span>
+
+    <button
+      (click)="nextPage()"
+      [disabled]="currentPage() === totalPages()"
+      class="px-4 py-2 bg-gray-700 text-white rounded disabled:opacity-50"
+    >
+      Next
+    </button>
+  </div>
   } @else if (movies()?.length === 0) {
-  <p class="fallback-text">Unfortunately, no popular movies could be found.</p>
+  <p class="mt-4 fallback-text">Unfortunately, no popular movies could be found.</p>
   }
 </app-movies-container>
