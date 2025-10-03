@@ -1,9 +1,10 @@
 @import './styles/forms.css';
+@import './styles/pagination.css';
+@import "primeicons/primeicons.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 
 
 body {

@@ -15,7 +15,7 @@ export class MoviesComponent {
   movies = input.required<Movie[]>();
   selectMovie = output<Movie>();
 
-  onSelectMovie(movie: Movie) {
-    this.selectMovie.emit(movie);
-  }
+  // onSelectMovie(movie: Movie) {
+  //   this.selectMovie.emit(movie);
+  // }
 }

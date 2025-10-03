@@ -1,1 +1,23 @@
-<p>search-results works!</p>
+<app-movies-container title="Search Results:">
+  @if (isFetching() && !error()) {
+    <!-- <p class="fallback-text">Fetching movies..</p> -->
+  }
+
+  @if (error()) {
+    <p class="mt-4 fallback-text">{{ error() }}</p>
+  }
+  @if (movies()) {
+  <app-movies [movies]="movies()!"/>
+
+  <div class="mt-6 flex justify-center">
+    <p-paginator
+      [rows]="20"
+      [totalRecords]="cappedTotalRecords()"
+      [first]="(currentPage() - 1) * 20"
+      (onPageChange)="loadPageFromPaginator($event)">
+    </p-paginator>
+  </div>
+  } @else if (movies()?.length === 0) {
+    <p class="mt-4 fallback-text">No results:(</p>
+  }
+</app-movies-container>

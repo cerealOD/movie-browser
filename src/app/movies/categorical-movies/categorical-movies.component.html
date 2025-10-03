@@ -7,7 +7,7 @@
     <p class="mt-4 fallback-text">{{ error() }}</p>
   }
   @if (movies()) {
-  <app-movies [movies]="movies()!" (selectMovie)="onSelectMovie($event)"/>
+  <app-movies [movies]="movies()!"/>
 
   <div class="mt-6 flex justify-center">
     <p-paginator
@@ -18,6 +18,6 @@
     </p-paginator>
   </div>
   } @else if (movies()?.length === 0) {
-  <p class="mt-4 fallback-text">Unfortunately, no popular movies could be found.</p>
+  <p class="mt-4 fallback-text">Unfortunately, no {{category()}}movies could be found.</p>
   }
 </app-movies-container>

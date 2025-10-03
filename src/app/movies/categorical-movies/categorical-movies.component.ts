@@ -10,14 +10,6 @@ import {
 import { Movie } from '../movie.model';
 import { MoviesComponent } from '../movies.component';
 import { MoviesContainerComponent } from '../movies-container/movies-container.component';
-import { HttpClient } from '@angular/common/http';
-import {
-  catchError,
-  combineLatest,
-  distinctUntilChanged,
-  map,
-  throwError,
-} from 'rxjs';
 import { MoviesService } from '../../services/movies.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TitleizePipe } from '../../pipes/titleize.pipe';
@@ -39,7 +31,6 @@ export class CategoricalMoviesComponent implements OnInit {
   category = signal<string>('');
   movies = signal<Movie[] | undefined>(undefined);
   currentPage = signal(1);
-  totalPages = signal(1);
   totalRecords = signal(1);
   isFetching = signal(false);
   error = signal('');
@@ -101,7 +92,6 @@ export class CategoricalMoviesComponent implements OnInit {
     this.moviesService.loadCategoricalMovies(this.category(), page).subscribe({
       next: (response: any) => {
         this.movies.set(response.results || []);
-        this.totalPages.set(response.total_pages || 1);
         this.totalRecords.set(response.total_results);
         this.currentPage.set(page);
       },
@@ -115,9 +105,9 @@ export class CategoricalMoviesComponent implements OnInit {
   }
 
   cappedTotalRecords = computed(() => {
-    const rowsPerPage = 20;
+    const itemsPerPage = 20;
     const maxPages = 500;
-    return Math.min(this.totalRecords(), maxPages * rowsPerPage);
+    return Math.min(this.totalRecords(), maxPages * itemsPerPage);
   });
 
   loadPageFromPaginator(event: any) {
@@ -129,42 +119,6 @@ export class CategoricalMoviesComponent implements OnInit {
     });
     // The subscription on queryParamMap will call loadMoviesForPage
   }
-
-  // User-driven navigation: update the URL only. The subscription will load data.
-  // nextPage() {
-  //   const curr = this.currentPage();
-  //   if (curr < this.totalPages()) {
-  //     const next = curr + 1;
-  //     this.router.navigate([], {
-  //       relativeTo: this.route,
-  //       queryParams: { page: next },
-  //       queryParamsHandling: 'merge',
-  //     });
-  //   }
-  // }
-
-  // prevPage() {
-  //   const curr = this.currentPage();
-  //   if (curr > 1) {
-  //     const prev = curr - 1;
-  //     this.router.navigate([], {
-  //       relativeTo: this.route,
-  //       queryParams: { page: prev },
-  //       queryParamsHandling: 'merge',
-  //     });
-  //   }
-  // }
-
-  // // optional: direct go-to-page function for numbered buttons
-  // goToPage(page: number) {
-  //   if (page >= 1 && page <= this.totalPages()) {
-  //     this.router.navigate([], {
-  //       relativeTo: this.route,
-  //       queryParams: { page },
-  //       queryParamsHandling: 'merge',
-  //     });
-  //   }
-  // }
 
   //send some data to the backend
   onSelectMovie(selectedMovie: Movie) {}
