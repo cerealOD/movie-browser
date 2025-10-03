@@ -22,6 +22,13 @@ export class MoviesService {
     );
   }
 
+  searchMovies(query: string, page: number = 1) {
+    return this.fetchMovies(
+      `${environment.apiUrl}/movies/search?query=${query}&page=${page}`,
+      'Something went wrong fetching search result'
+    );
+  }
+
   // loadUserPlaces() {
   //   return this.fetchPlaces(
   //     'http://localhost:3000/user-places',

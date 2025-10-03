@@ -1,4 +1,11 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 
 import { Movie } from '../movie.model';
 import { MoviesComponent } from '../movies.component';
@@ -14,19 +21,26 @@ import {
 import { MoviesService } from '../../services/movies.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TitleizePipe } from '../../pipes/titleize.pipe';
+import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
   selector: 'app-popular-movies',
   standalone: true,
   templateUrl: './categorical-movies.component.html',
   styleUrl: './categorical-movies.component.css',
-  imports: [MoviesComponent, MoviesContainerComponent, TitleizePipe],
+  imports: [
+    MoviesComponent,
+    MoviesContainerComponent,
+    TitleizePipe,
+    PaginatorModule,
+  ],
 })
 export class CategoricalMoviesComponent implements OnInit {
   category = signal<string>('');
   movies = signal<Movie[] | undefined>(undefined);
   currentPage = signal(1);
   totalPages = signal(1);
+  totalRecords = signal(1);
   isFetching = signal(false);
   error = signal('');
 
@@ -34,47 +48,53 @@ export class CategoricalMoviesComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
+  private lastLoadedCategory = '';
+  private lastLoadedPage = 0;
 
   ngOnInit() {
-    // Single combined subscription: reacts when either route param or query param changes
-    const sub = combineLatest([
-      this.route.paramMap, // e.g. /movies/:category
-      this.route.queryParamMap, // e.g. ?page=2
-    ])
-      .pipe(
-        map(([params, qparams]) => ({
-          category: params.get('category'),
-          page: Number(qparams.get('page')) || 1,
-        })),
-        distinctUntilChanged(
-          (prev, curr) =>
-            prev.category === curr.category && prev.page === curr.page
-        )
-      )
-      .subscribe(({ category, page }) => {
-        if (this.category() !== category) {
-          this.category.set(category!);
+    const categorySub = this.route.paramMap.subscribe((params) => {
+      const newCategory = params.get('category') || '';
+      if (newCategory !== this.category()) {
+        this.category.set(newCategory);
 
-          // Reset page to 1 when category changes
-          if (page !== 1) {
-            this.router.navigate([], {
-              relativeTo: this.route,
-              queryParams: { page: 1 },
-              queryParamsHandling: 'merge',
-            });
-            return; // wait for next emission
-          }
+        const pageParam = Number(this.route.snapshot.queryParamMap.get('page'));
+        if (!pageParam || pageParam < 1) {
+          // Reset page to 1 in URL
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { page: 1 },
+            queryParamsHandling: 'merge',
+          });
         }
+      }
+    });
 
-        this.category.set(category!);
-        this.loadMoviesForPage(page);
-      });
+    // Watch page query param separately
+    const pageSub = this.route.queryParamMap.subscribe((qparams) => {
+      const page = Number(qparams.get('page')) || 1;
 
-    // Clean up
-    this.destroyRef.onDestroy(() => sub.unsubscribe());
+      // Only load if category is set
+      if (!this.category()) return;
+
+      // Avoid double load if page/category didn't change
+      if (
+        this.lastLoadedCategory === this.category() &&
+        this.lastLoadedPage === page
+      )
+        return;
+
+      this.lastLoadedCategory = this.category();
+      this.lastLoadedPage = page;
+
+      this.loadMoviesForPage(page);
+    });
+
+    this.destroyRef.onDestroy(() => {
+      categorySub.unsubscribe();
+      pageSub.unsubscribe();
+    });
   }
 
-  // Call this only to fetch data; it does NOT update the URL
   private loadMoviesForPage(page: number) {
     console.log(this.category());
     this.isFetching.set(true);
@@ -82,6 +102,7 @@ export class CategoricalMoviesComponent implements OnInit {
       next: (response: any) => {
         this.movies.set(response.results || []);
         this.totalPages.set(response.total_pages || 1);
+        this.totalRecords.set(response.total_results);
         this.currentPage.set(page);
       },
       error: (err: Error) => {
@@ -93,41 +114,57 @@ export class CategoricalMoviesComponent implements OnInit {
     });
   }
 
+  cappedTotalRecords = computed(() => {
+    const rowsPerPage = 20;
+    const maxPages = 500;
+    return Math.min(this.totalRecords(), maxPages * rowsPerPage);
+  });
+
+  loadPageFromPaginator(event: any) {
+    const page = event.page + 1; // PrimeNG is zero-based
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page },
+      queryParamsHandling: 'merge',
+    });
+    // The subscription on queryParamMap will call loadMoviesForPage
+  }
+
   // User-driven navigation: update the URL only. The subscription will load data.
-  nextPage() {
-    const curr = this.currentPage();
-    if (curr < this.totalPages()) {
-      const next = curr + 1;
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: { page: next },
-        queryParamsHandling: 'merge',
-      });
-    }
-  }
+  // nextPage() {
+  //   const curr = this.currentPage();
+  //   if (curr < this.totalPages()) {
+  //     const next = curr + 1;
+  //     this.router.navigate([], {
+  //       relativeTo: this.route,
+  //       queryParams: { page: next },
+  //       queryParamsHandling: 'merge',
+  //     });
+  //   }
+  // }
 
-  prevPage() {
-    const curr = this.currentPage();
-    if (curr > 1) {
-      const prev = curr - 1;
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: { page: prev },
-        queryParamsHandling: 'merge',
-      });
-    }
-  }
+  // prevPage() {
+  //   const curr = this.currentPage();
+  //   if (curr > 1) {
+  //     const prev = curr - 1;
+  //     this.router.navigate([], {
+  //       relativeTo: this.route,
+  //       queryParams: { page: prev },
+  //       queryParamsHandling: 'merge',
+  //     });
+  //   }
+  // }
 
-  // optional: direct go-to-page function for numbered buttons
-  goToPage(page: number) {
-    if (page >= 1 && page <= this.totalPages()) {
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: { page },
-        queryParamsHandling: 'merge',
-      });
-    }
-  }
+  // // optional: direct go-to-page function for numbered buttons
+  // goToPage(page: number) {
+  //   if (page >= 1 && page <= this.totalPages()) {
+  //     this.router.navigate([], {
+  //       relativeTo: this.route,
+  //       queryParams: { page },
+  //       queryParamsHandling: 'merge',
+  //     });
+  //   }
+  // }
 
   //send some data to the backend
   onSelectMovie(selectedMovie: Movie) {}

@@ -1,11 +1,13 @@
 import { Component, input, output } from '@angular/core';
 
 import { Movie } from './movie.model';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-movies',
   standalone: true,
-  imports: [],
+  imports: [RouterLink, RouterLinkActive, DatePipe],
   templateUrl: './movies.component.html',
   styleUrl: './movies.component.css',
 })

@@ -11,11 +11,13 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { AsyncPipe } from '@angular/common';
 import { HeaderService } from '../services/header.service';
+import { MoviesService } from '../services/movies.service';
+import { FormControl, FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, AsyncPipe],
+  imports: [RouterLink, RouterLinkActive, AsyncPipe, FormsModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
@@ -24,6 +26,8 @@ export class HeaderComponent {
   @ViewChild('dropdownWrapper') dropdownWrapper!: ElementRef;
   auth = inject(AuthService);
   headerService = inject(HeaderService);
+  searchQuery = '';
+  private moviesService = inject(MoviesService);
 
   initial = computed(
     () => this.auth.user()?.username.charAt(0).toUpperCase() ?? '?'
@@ -49,5 +53,14 @@ export class HeaderComponent {
     this.auth.logout();
     this.headerService.close();
     this.router.navigate(['/login']);
+  }
+
+  onSearch() {
+    if (!this.searchQuery.trim()) return;
+
+    this.router.navigate(['/search'], {
+      queryParams: { query: this.searchQuery, page: 1 },
+      queryParamsHandling: 'merge',
+    });
   }
 }

@@ -14,6 +14,8 @@ import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { AuthService } from './services/auth.service';
 import { ProfileComponent } from './profile/profile.component';
+import { MovieShowComponent } from './movies/movie-show/movie-show.component';
+import { SearchResultsComponent } from './movies/search-results/search-results.component';
 
 const dummyCanMatch: CanMatchFn = (route, segments) => {
   const router = inject(Router);
@@ -58,5 +60,13 @@ export const routes: Routes = [
   {
     path: 'movies/:category',
     component: CategoricalMoviesComponent,
+  },
+  {
+    path: 'movie/:id',
+    component: MovieShowComponent,
+  },
+  {
+    path: 'search',
+    component: SearchResultsComponent,
   },
 ];

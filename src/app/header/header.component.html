@@ -17,6 +17,19 @@
         </a>
       </div>
     </div>
+    <div class="flex items-center gap-x-8">
+      <form (ngSubmit)="onSearch()" class="flex items-center">
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          name="search"
+          placeholder="Search movies..."
+          class="px-3 py-2 rounded-l-lg border border-gray-300 focus:outline-none"
+        />
+        <button type="submit" class="bg-secondary text-primary px-3 py-2 rounded-r-lg">
+          <i class="pi pi-search"></i> <!-- PrimeNG search icon -->
+        </button>
+      </form>
     @if (auth.isLoggedIn$ | async; ) {
       <div class="relative" #dropdownWrapper>
         <button (click)="toggleDropdown($event)" class="bg-secondary text-primary  font-medium rounded-full w-10 h-10 flex items-center justify-center">{{initial()}}</button>
@@ -45,14 +58,13 @@
         }
       </div>
     } @else {
-      <div class="flex items-center gap-x-8">
-        <a [routerLink]="['/login']" class="shadow-lg rounded-lg bg-white px-4 py-2 text-primary font-semibold">
-          Log In
-        </a>
-        <a [routerLink]="['/register']" class="shadow-lg rounded-lg bg-secondary text-primary px-4 py-2 text-white font-semibold">
-          Sign Up
-        </a>
-      </div>
+      <a [routerLink]="['/login']" class="shadow-lg rounded-lg bg-white px-4 py-2 text-primary font-semibold">
+        Log In
+      </a>
+      <a [routerLink]="['/register']" class="shadow-lg rounded-lg bg-secondary text-primary px-4 py-2 text-white font-semibold">
+        Sign Up
+      </a>
     }
+    </div>
   </nav>
 </header>
