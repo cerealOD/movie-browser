@@ -1,1 +1,70 @@
-<p>movie-show works!</p>
+<section class="w-full relative h-[500px] xl:h-[600px] 2xl:h-[650px] bg-center bg-no-repeat bg-cover" [style.background-image]="'linear-gradient(180deg, rgba(31,28,44,0.2) 10%, rgba(31,28,44,0.8004) 69%, rgba(31,28,44,1) 88%), url(https://image.tmdb.org/t/p/original' + movie()!.backdrop_path + ')'">
+</section>
+<section class="container mx-auto absolute right-0 left-0 -mt-60 xl:-mt-80">
+  <div class="flex flex-row gap-8">
+    <div class="flex flex-col gap-4">
+      @if (movie()!.poster_path) {
+        <img class="rounded-xl w-[250px]" [src]="'https://image.tmdb.org/t/p/w500' + movie()!.poster_path" loading="lazy" />
+      } @else {
+        <img class="rounded-xl w-[250px]" src="placeholder.png" loading="lazy" />
+      }
+      <div class="flex flex-row items-center justify-between gap-2">
+        <button class="text-sm font-semibold bg-secondary rounded-lg h-8 px-3 text-primary gap-2 flex items-center hover:bg-opacity-50 flex-1 flex items-center justify-center" (click)="addToFavs()">
+          <i class="font-semibold pi pi-plus"></i>
+          Add to watchlist
+        </button>
+        <a [href]="'https://www.imdb.com/title/' + movie()!.imdb_id">
+          <img class="h-8 rounded-lg" src="imdb-logo.png" />
+        </a>
+      </div>
+    </div>
+    <div class="flex flex-col my-4">
+      <h1 class="font-semibold text-4xl text-white font-montserrat mb-3">
+        {{movie()!.title}}
+      </h1>
+      <div class="flex items-center gap-3 mb-8">
+        @for (genre of movie()!.genres; track genre.id) {
+          <div class="text-sm text-primary bg-white rounded-lg py-1 px-2">
+            {{genre.name}}
+          </div>
+        }
+      </div>
+      <p class="text-white text-xl max-w-[900px] leading-1 font-montserrat">
+        {{movie()!.overview}}
+      </p>
+      <div class="mt-8 flex flex-row gap-4 text-white">
+        <div class="info-card">
+          <i class="pi pi-calendar text-secondary text-xl" style="font-size: 1.25rem;"></i>
+          <div>
+            <p class="text-xs uppercase text-gray-400">Release date</p>
+            <p class="text-lg font-semibold">{{ movie()!.release_date | date:'mediumDate' }}</p>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <i class="pi pi-clock text-secondary text-xl" style="font-size: 1.25rem;"></i>
+          <div>
+            <p class="text-xs uppercase text-gray-400">Playtime</p>
+            <p class="text-lg font-semibold">{{ movie()!.runtime }} mins</p>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <i class="pi pi-star text-yellow-400 text-xl" style="font-size: 1.25rem;"></i>
+          <div>
+            <p class="text-xs uppercase text-gray-400">Score</p>
+            <p class="text-lg font-semibold">{{ movie()!.vote_average }}</p>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+  <div class="mt-16">
+    <h2 class="font-medium underline text-3xl text-white font-montserrat mb-8">Reviews</h2>
+    <h2 class="font-medium underline text-3xl text-white font-montserrat mb-8">Similar Movies</h2>
+    <h2 class="font-medium underline text-3xl text-white font-montserrat mb-8">Image Gallery</h2>
+  </div>
+</section>

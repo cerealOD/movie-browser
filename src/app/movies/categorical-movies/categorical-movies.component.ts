@@ -7,7 +7,7 @@ import {
   signal,
 } from '@angular/core';
 
-import { Movie } from '../movie.model';
+import { IndexMovie } from '../../models/indexMovie.model';
 import { MoviesComponent } from '../movies.component';
 import { MoviesContainerComponent } from '../movies-container/movies-container.component';
 import { MoviesService } from '../../services/movies.service';
@@ -29,7 +29,7 @@ import { PaginatorModule } from 'primeng/paginator';
 })
 export class CategoricalMoviesComponent implements OnInit {
   category = signal<string>('');
-  movies = signal<Movie[] | undefined>(undefined);
+  movies = signal<IndexMovie[] | undefined>(undefined);
   currentPage = signal(1);
   totalRecords = signal(1);
   isFetching = signal(false);
@@ -119,7 +119,4 @@ export class CategoricalMoviesComponent implements OnInit {
     });
     // The subscription on queryParamMap will call loadMoviesForPage
   }
-
-  //send some data to the backend
-  onSelectMovie(selectedMovie: Movie) {}
 }

@@ -15,7 +15,7 @@
 }
 
 .p-paginator-page.p-paginator-page-selected {
-  @apply !bg-secondary !text-white;
+  @apply !bg-secondary !text-primary;
 }
 
 .p-paginator-page:not(.p-disabled):not(.p-paginator-page-selected):hover{
@@ -38,8 +38,4 @@
 }
 .p-paginator .p-paginator-last:hover {
   @apply !text-primary;
-}
-
-.p-disabled {
-  @apply !text-opacity-20;
 }

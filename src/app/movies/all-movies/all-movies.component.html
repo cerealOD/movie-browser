@@ -7,7 +7,7 @@
     <p class="fallback-text">{{ error() }}</p>
   }
   @if (movies()) {
-  <app-movies [movies]="movies()!" (selectMovie)="onSelectMovie($event)"/>
+  <app-movies [movies]="movies()!"/>
   } @else if (movies()?.length === 0) {
   <p class="fallback-text">Unfortunately, no popular movies could be found.</p>
   }

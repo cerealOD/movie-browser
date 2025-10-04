@@ -1,16 +1,16 @@
+import { Genre } from './genre.model';
+
 export interface Movie {
-  id: string;
-  title: string;
   adult: boolean;
   backdrop_path: string;
-  genre_ids: number[];
-  original_language: string;
+  id: number;
+  imdb_id: string;
   original_title: string;
   overview: string;
-  popularity: number;
   poster_path: string;
   release_date: string;
-  video: boolean;
+  runtime: number;
+  genres: Genre[];
+  title: string;
   vote_average: number;
-  vote_count: number;
 }

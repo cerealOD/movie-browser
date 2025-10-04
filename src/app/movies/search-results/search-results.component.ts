@@ -1,7 +1,7 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MoviesService } from '../../services/movies.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Movie } from '../movie.model';
+import { IndexMovie } from '../../models/indexMovie.model';
 import { MoviesContainerComponent } from '../movies-container/movies-container.component';
 import { MoviesComponent } from '../movies.component';
 import { PaginatorModule } from 'primeng/paginator';
@@ -15,7 +15,7 @@ import { PaginatorModule } from 'primeng/paginator';
 export class SearchResultsComponent implements OnInit {
   query = '';
   // page = 1;
-  movies = signal<Movie[] | undefined>(undefined);
+  movies = signal<IndexMovie[] | undefined>(undefined);
   currentPage = signal(1);
   totalRecords = signal(1);
   isFetching = signal(false);

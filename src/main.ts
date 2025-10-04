@@ -9,8 +9,11 @@ import {
   withInterceptors,
 } from '@angular/common/http';
 import {
+  InMemoryScrollingFeature,
+  InMemoryScrollingOptions,
   provideRouter,
   withComponentInputBinding,
+  withInMemoryScrolling,
   withRouterConfig,
 } from '@angular/router';
 import { routes } from './app/app.routes';
@@ -34,9 +37,16 @@ function loggingInterceptor(
   );
 }
 
+const scrollConfig: InMemoryScrollingOptions = {
+  scrollPositionRestoration: 'top',
+  anchorScrolling: 'enabled',
+};
+
+const inMemoryScrollingFeature: InMemoryScrollingFeature =
+  withInMemoryScrolling(scrollConfig);
+
 bootstrapApplication(AppComponent, {
   providers: [
-    provideAnimationsAsync(),
     providePrimeNG({
       theme: {
         preset: Aura,
@@ -44,6 +54,7 @@ bootstrapApplication(AppComponent, {
     }),
     provideRouter(
       routes,
+      inMemoryScrollingFeature,
       withComponentInputBinding(),
       withRouterConfig({
         paramsInheritanceStrategy: 'always',

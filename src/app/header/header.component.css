@@ -1,10 +1,14 @@
 .nav-link {
-  @apply font-medium text-white text-lg;
+  @apply font-medium text-white rounded-lg px-3 py-1;
 }
 .nav-link.selected {
-  @apply font-semibold;
+  @apply bg-secondary text-primary;
 }
 
 .profile-link {
   @apply block px-4 py-2 hover:bg-gray-100 cursor-pointer;
+}
+
+:host {
+  @apply sticky top-0 z-30 ;
 }

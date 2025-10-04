@@ -42,7 +42,8 @@ const authGuard: CanActivateFn = (route, state) => {
 export const routes: Routes = [
   {
     path: '',
-    component: AllMoviesComponent,
+    redirectTo: 'movies/popular?page=1',
+    pathMatch: 'full',
   },
   {
     path: 'login',

@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
 
-import { Movie } from './movie.model';
+import { IndexMovie } from '../models/indexMovie.model';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DatePipe } from '@angular/common';
 
@@ -12,10 +12,6 @@ import { DatePipe } from '@angular/common';
   styleUrl: './movies.component.css',
 })
 export class MoviesComponent {
-  movies = input.required<Movie[]>();
-  selectMovie = output<Movie>();
-
-  // onSelectMovie(movie: Movie) {
-  //   this.selectMovie.emit(movie);
-  // }
+  movies = input.required<IndexMovie[]>();
+  selectMovie = output<IndexMovie>();
 }
