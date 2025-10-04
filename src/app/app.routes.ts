@@ -16,6 +16,7 @@ import { AuthService } from './services/auth.service';
 import { ProfileComponent } from './profile/profile.component';
 import { MovieShowComponent } from './movies/movie-show/movie-show.component';
 import { SearchResultsComponent } from './movies/search-results/search-results.component';
+import { FavoritesComponent } from './profile/favorites/favorites.component';
 
 const dummyCanMatch: CanMatchFn = (route, segments) => {
   const router = inject(Router);
@@ -57,7 +58,14 @@ export const routes: Routes = [
     path: 'profile',
     component: ProfileComponent,
     canActivate: [authGuard],
+    children: [
+      {
+        path: 'favorites',
+        component: FavoritesComponent,
+      },
+    ],
   },
+
   {
     path: 'movies/:category',
     component: CategoricalMoviesComponent,

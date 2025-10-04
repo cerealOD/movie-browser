@@ -9,9 +9,13 @@
         <img class="rounded-xl w-[250px]" src="placeholder.png" loading="lazy" />
       }
       <div class="flex flex-row items-center justify-between gap-2">
-        <button class="text-sm font-semibold bg-secondary rounded-lg h-8 px-3 text-primary gap-2 flex items-center hover:bg-opacity-50 flex-1 flex items-center justify-center" (click)="addToFavs()">
-          <i class="font-semibold pi pi-plus"></i>
-          Add to watchlist
+        <button class="text-sm font-semibold bg-secondary rounded-lg h-8 px-3 text-primary gap-2 flex items-center hover:bg-opacity-50 flex-1 flex items-center justify-center" (click)="toggleFavorite()">
+          <i
+          class="font-semibold pi text-primary"
+          [class.pi-heart]="!isFavorite()"
+          [class.pi-heart-fill]="isFavorite()"
+          ></i>
+          {{ isFavorite() ? 'Added' : 'Add to favorites' }}
         </button>
         <a [href]="'https://www.imdb.com/title/' + movie()!.imdb_id">
           <img class="h-8 rounded-lg" src="imdb-logo.png" />

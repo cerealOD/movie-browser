@@ -39,13 +39,13 @@
           >
             <ul class="text-sm text-gray-700">
               <li>
-                <a class="rounded-t-xl profile-link">
+                <a [routerLink]="['/profile']" class="rounded-t-xl profile-link">
                   Profile Settings
                 </a>
               </li>
               <li>
-                <a class="profile-link">
-                  Watchlists
+                <a [routerLink]="['/profile/favorites']" class="profile-link">
+                  Favorites
                 </a>
               </li>
               <li>

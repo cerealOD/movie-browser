@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 
 import { IndexMovie } from '../models/indexMovie.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { ErrorService } from '../shared/error.service';
@@ -13,12 +13,77 @@ import { Movie } from '../models/movie.model';
 export class MoviesService {
   private errorService = inject(ErrorService);
   private httpClient = inject(HttpClient);
+  private userFavorites = signal<IndexMovie[]>([]);
+  loadedUserFavorites = this.userFavorites.asReadonly();
+
+  private getAuthHeaders() {
+    const token = localStorage.getItem('token'); // or from auth service
+    return {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+      }),
+    };
+  }
 
   loadMovie(movieId: number) {
     return this.fetchMovie(
       `${environment.apiUrl}/movie/${movieId}`,
       'Something went wrong fetching the requested movie'
     );
+  }
+
+  loadUserFavorites() {
+    return this.httpClient
+      .get<IndexMovie[]>(
+        `${environment.apiUrl}/favorites`,
+        this.getAuthHeaders()
+      )
+      .pipe(
+        tap((favorites) => this.userFavorites.set(favorites)),
+        catchError((err) => {
+          console.error('Failed to load favorites:', err);
+          return throwError(() => new Error('Failed to load favorites'));
+        })
+      );
+  }
+
+  isFavorite(movieId: number): boolean {
+    return this.userFavorites().some((fav) => fav.id === movieId);
+  }
+
+  addMovieToUserFavorites(movie: IndexMovie) {
+    const prevFavs = this.userFavorites();
+    if (prevFavs.some((m) => m.id === movie.id)) {
+      return throwError(() => new Error('Already in favorites'));
+    }
+
+    return this.httpClient
+      .post(`${environment.apiUrl}/favorites`, movie, this.getAuthHeaders())
+      .pipe(
+        tap(() => this.userFavorites.set([...prevFavs, movie])),
+        catchError((err) => {
+          console.error('Failed to add favorite:', err);
+          return throwError(() => new Error('Failed to add favorite'));
+        })
+      );
+  }
+
+  removeMovieFromUserFavorites(movieId: number) {
+    return this.httpClient
+      .delete(
+        `${environment.apiUrl}/favorites/${movieId}`,
+        this.getAuthHeaders()
+      )
+      .pipe(
+        tap(() => {
+          const updated = this.userFavorites().filter((m) => m.id !== movieId);
+          this.userFavorites.set(updated);
+        }),
+        catchError((err) => {
+          console.error('Failed to remove favorite:', err);
+          return throwError(() => new Error('Failed to remove favorite'));
+        })
+      );
   }
 
   loadCategoricalMovies(category: string, page: number = 1) {

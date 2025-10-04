@@ -1,8 +1,9 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { MoviesService } from '../../services/movies.service';
 import { Movie } from '../../models/movie.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { IndexMovie } from '../../models/indexMovie.model';
 
 @Component({
   selector: 'app-movie-show',
@@ -20,6 +21,11 @@ export class MovieShowComponent {
   isFetching = signal(false);
   error = signal('');
   movie = signal<Movie | undefined>(undefined);
+  isAdding = signal(false);
+  addError = signal<string | null>(null);
+
+  // pull favorites as readonly signal
+  userFavorites = this.moviesService.loadedUserFavorites;
 
   ngOnInit() {
     const movieIdSub = this.route.paramMap.subscribe((params) => {
@@ -46,5 +52,42 @@ export class MovieShowComponent {
     });
   }
 
-  addToFavs() {}
+  isFavorite = computed(() =>
+    this.moviesService.isFavorite(this.movie()?.id ?? -1)
+  );
+
+  toggleFavorite() {
+    const movie = this.movie();
+    if (!movie) return;
+
+    const indexMovie = {
+      adult: movie.adult,
+      id: movie.id,
+      poster_path: movie.poster_path,
+      release_date: movie.release_date,
+      genre_ids: movie.genres.map((g) => Number(g.id)), // convert Genre[] → number[]
+      title: movie.title,
+      vote_average: movie.vote_average,
+    } satisfies IndexMovie;
+
+    if (this.isFavorite()) {
+      // Remove
+      const sub = this.moviesService
+        .removeMovieFromUserFavorites(movie.id)
+        .subscribe({
+          next: () => console.log('Removed from favorites'),
+          error: (err: Error) => console.error(err.message),
+        });
+      this.destroyRef.onDestroy(() => sub.unsubscribe());
+    } else {
+      // Add
+      const sub = this.moviesService
+        .addMovieToUserFavorites(indexMovie)
+        .subscribe({
+          next: () => console.log('Added to favorites'),
+          error: (err: Error) => console.error(err.message),
+        });
+      this.destroyRef.onDestroy(() => sub.unsubscribe());
+    }
+  }
 }
