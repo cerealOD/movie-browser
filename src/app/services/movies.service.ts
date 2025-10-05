@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { ErrorService } from '../shared/error.service';
 import { Movie } from '../models/movie.model';
+import { Credit } from '../models/credit.model';
 
 @Injectable({
   providedIn: 'root',
@@ -93,6 +94,20 @@ export class MoviesService {
     );
   }
 
+  loadSimilarMovies(movieId: number, page: number = 1) {
+    return this.fetchMovies(
+      `${environment.apiUrl}/movie/${movieId}/similar?page=${page}`,
+      'Something went wrong fetching similar movies'
+    );
+  }
+
+  loadCredits(movieId: number) {
+    return this.fetchCredits(
+      `${environment.apiUrl}/movie/${movieId}/credits`,
+      'Something went wrong fetching credits'
+    );
+  }
+
   searchMovies(query: string, page: number = 1) {
     return this.fetchMovies(
       `${environment.apiUrl}/movies/search?query=${query}&page=${page}`,
@@ -116,7 +131,21 @@ export class MoviesService {
         results: IndexMovie[];
         total_pages: number;
         total_results: number;
-      }>(url) //we can add a pipe at this step
+      }>(url)
+      .pipe(
+        catchError((error) => {
+          console.log(error);
+          return throwError(() => new Error(errorMessage));
+        })
+      );
+  }
+
+  private fetchCredits(url: string, errorMessage: string) {
+    return this.httpClient
+      .get<{
+        id: string;
+        cast: Credit[];
+      }>(url)
       .pipe(
         catchError((error) => {
           console.log(error);

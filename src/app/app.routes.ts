@@ -55,15 +55,9 @@ export const routes: Routes = [
     component: SignupComponent,
   },
   {
-    path: 'profile',
-    component: ProfileComponent,
+    path: 'favorites',
+    component: FavoritesComponent,
     canActivate: [authGuard],
-    children: [
-      {
-        path: 'favorites',
-        component: FavoritesComponent,
-      },
-    ],
   },
 
   {
