@@ -1,27 +1,21 @@
-# Http
+Frontend application for my angular movie browser practice app. This project was built with Angular 20 and with the help of some external libraries:
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.0.
+[PrimeNg](https://primeng.org/) for pagination and icons
 
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+[TailwindCSS](https://tailwindcss.com/) for inline css
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run `npm install` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
+## Development server
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `npm start` to run the dev server
 
-## Running end-to-end tests
+## Project Overview
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+This frontend app makes requests to the respective backend app in order to fetch movies and movie information from [TMBD](https://www.themoviedb.org/). It then displays this information in several pages. There are 4 list pages which show popular/top rated/now playing/upcoming movies in a grid structure with pagination.
 
-## Further help
+Users can sign up and log in via forms, and they get assigned a JWT with 1 hour expiration by the backend. Once a user is signed in, they can favorite and unfavorite a movie on the movie's show page. Favoriting is not an available feature when not logged in. 
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+The app also has a favorites page that is also only accessible if the user is logged in. The favorites page shows the user's favorited movies and the user is able to remove any movie from the list.
