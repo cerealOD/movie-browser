@@ -14,3 +14,13 @@ body {
 .control-error {
   @apply text-[#a80404];
 }
+
+.fallback-text {
+  @apply text-white text-xl;
+}
+
+.favorite-btn {
+  @apply flex-none text-sm font-semibold bg-secondary rounded-lg h-9 px-3 text-primary gap-2 flex items-center hover:bg-opacity-50 flex items-center justify-center;
+
+  transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}

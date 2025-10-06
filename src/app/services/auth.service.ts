@@ -1,6 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -56,6 +57,16 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     const token = localStorage.getItem('token');
-    return !!token; // very basic check without checking if the token expired
+    if (!token) return false;
+
+    try {
+      const decoded: any = jwtDecode(token);
+      // JWT exp is in s so get current time in s
+      const currentTime = Date.now() / 1000;
+      return decoded.exp && decoded.exp > currentTime;
+    } catch (e) {
+      // invalid token
+      return false;
+    }
   }
 }
