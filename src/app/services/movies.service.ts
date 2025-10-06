@@ -7,6 +7,7 @@ import { catchError, map, tap, throwError } from 'rxjs';
 import { ErrorService } from '../shared/error.service';
 import { Movie } from '../models/movie.model';
 import { Cast } from '../models/cast.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',

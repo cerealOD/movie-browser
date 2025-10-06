@@ -6,6 +6,8 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { IndexMovie } from '../../models/indexMovie.model';
 import { Cast } from '../../models/cast.model';
 import { MovieComponent } from '../movie/movie.component';
+import { AuthService } from '../../services/auth.service';
+import { async } from 'rxjs';
 
 @Component({
   selector: 'app-movie-show',
@@ -17,6 +19,8 @@ export class MovieShowComponent {
   private moviesService = inject(MoviesService);
   private destroyRef = inject(DestroyRef);
   private route = inject(ActivatedRoute);
+  private auth = inject(AuthService);
+  private router = inject(Router);
 
   movieId = signal<number>(0);
   isFetching = signal(false);
@@ -33,6 +37,7 @@ export class MovieShowComponent {
   userFavorites = this.moviesService.loadedUserFavorites;
 
   ngOnInit() {
+    console.log(this.isFavorite());
     const movieIdSub = this.route.paramMap.subscribe((params) => {
       this.movieId.set(parseInt(params.get('id') || ''));
       this.fetchMovie(this.movieId());
@@ -92,41 +97,47 @@ export class MovieShowComponent {
   }
 
   isFavorite = computed(() =>
-    this.moviesService.isFavorite(this.movie()?.id ?? -1)
+    this.auth.isLoggedIn()
+      ? this.moviesService.isFavorite(this.movie()?.id ?? -1)
+      : false
   );
 
   toggleFavorite() {
-    const movie = this.movie();
-    if (!movie) return;
+    if (this.auth.isLoggedIn()) {
+      const movie = this.movie();
+      if (!movie) return;
 
-    const indexMovie = {
-      adult: movie.adult,
-      id: movie.id,
-      poster_path: movie.poster_path,
-      release_date: movie.release_date,
-      genre_ids: movie.genres.map((g) => Number(g.id)), // convert Genre[] → number[]
-      title: movie.title,
-      vote_average: movie.vote_average,
-    } satisfies IndexMovie;
+      const indexMovie = {
+        adult: movie.adult,
+        id: movie.id,
+        poster_path: movie.poster_path,
+        release_date: movie.release_date,
+        genre_ids: movie.genres.map((g) => Number(g.id)),
+        title: movie.title,
+        vote_average: movie.vote_average,
+      } satisfies IndexMovie;
 
-    if (this.isFavorite()) {
-      // Remove
-      const sub = this.moviesService
-        .removeMovieFromUserFavorites(movie.id)
-        .subscribe({
-          next: () => console.log('Removed from favorites'),
-          error: (err: Error) => console.error(err.message),
-        });
-      this.destroyRef.onDestroy(() => sub.unsubscribe());
+      if (this.isFavorite()) {
+        // Remove
+        const sub = this.moviesService
+          .removeMovieFromUserFavorites(movie.id)
+          .subscribe({
+            next: () => console.log('Removed from favorites'),
+            error: (err: Error) => console.error(err.message),
+          });
+        this.destroyRef.onDestroy(() => sub.unsubscribe());
+      } else {
+        // Add
+        const sub = this.moviesService
+          .addMovieToUserFavorites(indexMovie)
+          .subscribe({
+            next: () => console.log('Added to favorites'),
+            error: (err: Error) => console.error(err.message),
+          });
+        this.destroyRef.onDestroy(() => sub.unsubscribe());
+      }
     } else {
-      // Add
-      const sub = this.moviesService
-        .addMovieToUserFavorites(indexMovie)
-        .subscribe({
-          next: () => console.log('Added to favorites'),
-          error: (err: Error) => console.error(err.message),
-        });
-      this.destroyRef.onDestroy(() => sub.unsubscribe());
+      this.router.navigate(['/login']);
     }
   }
 }
