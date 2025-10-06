@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { ErrorService } from '../shared/error.service';
 import { Movie } from '../models/movie.model';
-import { Credit } from '../models/credit.model';
+import { Cast } from '../models/cast.model';
 
 @Injectable({
   providedIn: 'root',
@@ -101,10 +101,10 @@ export class MoviesService {
     );
   }
 
-  loadCredits(movieId: number) {
-    return this.fetchCredits(
+  loadCast(movieId: number) {
+    return this.fetchCast(
       `${environment.apiUrl}/movie/${movieId}/credits`,
-      'Something went wrong fetching credits'
+      'Something went wrong fetching cast'
     );
   }
 
@@ -140,11 +140,11 @@ export class MoviesService {
       );
   }
 
-  private fetchCredits(url: string, errorMessage: string) {
+  private fetchCast(url: string, errorMessage: string) {
     return this.httpClient
       .get<{
         id: string;
-        cast: Credit[];
+        cast: Cast[];
       }>(url)
       .pipe(
         catchError((error) => {

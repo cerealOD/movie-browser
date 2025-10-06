@@ -1,6 +1,6 @@
 <app-movies-container title="{{ category() | titleize}} Movies">
   @if (isFetching() && !error()) {
-    <!-- <p class="fallback-text">Fetching movies..</p> -->
+    <!-- <i class="pi pi-spin pi-spinner text-white" style="font-size: 2rem"></i> -->
   }
 
   @if (error()) {

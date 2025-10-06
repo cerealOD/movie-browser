@@ -58,9 +58,6 @@ export class HeaderComponent {
   onSearch() {
     if (!this.searchQuery.trim()) return;
 
-    this.router.navigate(['/search'], {
-      queryParams: { query: this.searchQuery, page: 1 },
-      queryParamsHandling: 'merge',
-    });
+    this.router.navigateByUrl(`/search?query=${this.searchQuery}&page=1`);
   }
 }

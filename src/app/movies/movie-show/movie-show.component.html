@@ -1,31 +1,36 @@
 <section class="w-full fixed h-[250px] md:h-[400px] lg:h-[500px] xl:h-[600px] 2xl:h-[600px] bg-center bg-no-repeat bg-cover" [style.background-image]="'url(https://image.tmdb.org/t/p/original' + movie()!.backdrop_path + ')'">
 </section>
 <section class="relative">
-  <div class="w-full h-[250px] md:h-[400px] lg:h-[500px] xl:h-[600px] 2xl:h-[800px] bg-center bg-no-repeat bg-cover" [style.background]="'linear-gradient(180deg, rgba(31,28,44,0.2) 10%, rgba(31,28,44,0.6) 29%, rgba(31,28,44,0.8) 39%, rgba(31,28,44,1) 65%)'"></div>
-  <div class="container mx-auto flex flex-row gap-8 -mt-[500px]">
-    <div class="flex flex-col gap-4">
+  <div class="w-full h-[500px] md:h-[600px] xl:h-[700px] 2xl:h-[900px] bg-center bg-no-repeat bg-cover" [style.background]="'linear-gradient(180deg, rgba(31,28,44,0.2) 10%, rgba(31,28,44,0.6) 29%, rgba(31,28,44,0.8) 39%, rgba(31,28,44,1) 65%)'"></div>
+  <div class="container mx-auto grid grid-cols-3 lg:grid-cols-4 gap-8 -mt-[350px] sm:-mt-[330px] md:-mt-[380px] xl:-mt-[450px] 2xl:-mt-[600px]">
+    <div class="col-span-1 flex flex-col gap-4">
       @if (movie()!.poster_path) {
-        <img class="rounded-xl w-[250px]" [src]="'https://image.tmdb.org/t/p/w500' + movie()!.poster_path" loading="lazy" />
+        <img class="rounded-xl flex-none" [src]="'https://image.tmdb.org/t/p/w500' + movie()!.poster_path" loading="lazy" />
       } @else {
         <img class="rounded-xl w-[250px]" src="placeholder.png" loading="lazy" />
       }
-      <div class="flex flex-row items-center justify-between gap-2">
-        <button class="text-sm font-semibold bg-secondary rounded-lg h-9 px-3 text-primary gap-2 flex items-center hover:bg-opacity-50 flex-1 flex items-center justify-center" (click)="toggleFavorite()">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-2">
+        <button class="flex-none w-full sm:w-fit text-sm font-semibold bg-secondary rounded-lg h-9 px-3 text-primary gap-2 flex items-center hover:bg-opacity-50 sm:flex-1 flex items-center justify-center" (click)="toggleFavorite()">
           <i
           class="font-semibold pi text-primary"
           [class.pi-heart]="!isFavorite()"
           [class.pi-heart-fill]="isFavorite()"
           ></i>
-          {{ isFavorite() ? 'Added' : 'Add to favorites' }}
+          <span class="xl:hidden">
+            {{ isFavorite() ? 'Added' : 'Add' }}
+          </span>
+          <span class="hidden xl:inline">
+            {{ isFavorite() ? 'Added' : 'Add to favorites' }}
+          </span>
         </button>
-        <a [href]="'https://www.imdb.com/title/' + movie()!.imdb_id">
+        <a class="flex-none w-full sm:w-fit flex items-center justify-center rounded-lg bg-[#F6C800]" [href]="'https://www.imdb.com/title/' + movie()!.imdb_id">
           <img class="h-8 rounded-lg" src="imdb-logo.png" />
         </a>
       </div>
     </div>
-    <div class="flex flex-col mt-4">
+    <div class="col-span-2 lg:col-span-3 flex flex-col mt-4">
       <div>
-        <h1 class="font-semibold text-4xl text-white font-montserrat mb-3">
+        <h1 class="font-semibold text-2xl md:text-3xl lg:text-4xl text-white font-montserrat mb-3">
           {{movie()!.title}}
         </h1>
         <div class="flex items-center gap-3 mb-8">
@@ -35,72 +40,91 @@
             </div>
           }
         </div>
-        <p class="text-white text-xl max-w-[800px] leading-1 font-montserrat">
+        <p class="hidden lg:block text-white text-xl max-w-[800px] leading-1 font-montserrat">
           {{movie()!.overview}}
         </p>
       </div>
-      <div>
-        <div class="mt-8 flex flex-row gap-4 text-white">
-          <div class="info-card">
-            <i class="pi pi-calendar text-secondary text-xl" style="font-size: 1.25rem;"></i>
-            <div>
-              <p class="text-xs uppercase text-gray-400">Release date</p>
-              <p class="text-lg font-semibold">{{ movie()!.release_date | date:'mediumDate' }}</p>
-            </div>
-          </div>
+      <div class="flex flex-col gap-2 sm:gap-4 mt-2 sm:mt-4 text-white lg:hidden">
+        <div class="flex items-center gap-3">
+          <i class="pi pi-calendar text-secondary text-xl"></i>
+          <p class="sm:text-lg">
+            <span class="text-gray-400">Release date: </span>
+            <span class="font-semibold text-white">{{ movie()!.release_date ? (movie()!.release_date | date:'mediumDate') : 'Unknown'  }}</span>
+          </p>
+        </div>
 
-          <div class="info-card">
-            <i class="pi pi-clock text-secondary text-xl" style="font-size: 1.25rem;"></i>
-            <div>
-              <p class="text-xs uppercase text-gray-400">Playtime</p>
-              <p class="text-lg font-semibold">{{ movie()!.runtime }} mins</p>
-            </div>
-          </div>
+        <div class="flex items-center gap-3">
+          <i class="pi pi-clock text-secondary text-xl"></i>
+          <p class="sm:text-lg">
+            <span class="text-gray-400">Playtime: </span>
+            <span class="font-semibold text-white">{{ movie()!.runtime  ? ( movie()!.runtime + 'mins') : 'Unknown' }}</span>
+          </p>
+        </div>
 
-          <div class="info-card">
-            <i class="pi pi-star text-yellow-400 text-xl" style="font-size: 1.25rem;"></i>
-            <div>
-              <p class="text-xs uppercase text-gray-400">Score</p>
-              <p class="text-lg font-semibold">{{ movie()!.vote_average | number:'1.1-1' }}</p>
-            </div>
+        <div class="flex items-center gap-3">
+          <i class="pi pi-star text-yellow-400 text-xl"></i>
+          <p class="sm:text-lg">
+            <span class="text-gray-400">Score: </span>
+            <span class="font-semibold text-white">{{ movie()!.vote_average ? (movie()!.vote_average | number:'1.1-1') : 'Unknown' }}</span>
+          </p>
+        </div>
+      </div>
+      <div class="mt-8 hidden lg:flex flex-row gap-4 text-white">
+        <div class="info-card">
+          <i class="pi pi-calendar text-secondary text-xl" style="font-size: 1.25rem;"></i>
+          <div>
+            <p class="text-xs uppercase text-gray-400">Release date</p>
+            <p class="text-lg font-semibold">{{ movie()!.release_date ? (movie()!.release_date | date:'mediumDate') : 'Unknown' }}
+            </p>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <i class="pi pi-clock text-secondary text-xl" style="font-size: 1.25rem;"></i>
+          <div>
+            <p class="text-xs uppercase text-gray-400">Playtime</p>
+            <p class="text-lg font-semibold">{{ movie()!.runtime  ? ( movie()!.runtime + 'mins') : 'Unknown'}}</p>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <i class="pi pi-star text-yellow-400 text-xl" style="font-size: 1.25rem;"></i>
+          <div>
+            <p class="text-xs uppercase text-gray-400">Score</p>
+            <p class="text-lg font-semibold">{{ movie()!.vote_average ? (movie()!.vote_average | number:'1.1-1') : 'Unknown' }}</p>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="py-16 bg-primary">
+  <div class="py-8 lg:py-16 bg-primary">
     <div class="container mx-auto">
-      <div class="mb-16">
-        <h2 class="font-medium text-3xl text-white font-montserrat mb-8">Cast & Credits</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          @for (cast of cast(); track cast.id) {
-            <div class="flex mb-4 gap-4">
-              <img class="rounded-xl w-[100px]" [src]="'https://image.tmdb.org/t/p/w500' + cast.profile_path" loading="lazy"/>
-              <div class="flex flex-col">
-                <p class="text-white text-xl font-montserrat italic">{{ cast.name }}</p>
-                <span class="text-white font-semibold text-lg font-montserrat">as: {{ cast.character }}</span>
+      <p class="lg:hidden text-white md:text-lg leading-1 font-montserrat mb-8">
+        {{movie()!.overview}}
+      </p>
+      @if (cast()!.length !== 0) {
+        <div class="mb-16">
+          <h2 class="font-medium text-xl sm:text-2xl lg:text-3xl text-white font-montserrat mb-8">Cast & Credits</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            @for (cast of cast(); track cast.id) {
+              <div class="flex mb-4 gap-4">
+                <img class="rounded-xl w-[100px]" [src]="'https://image.tmdb.org/t/p/w500' + cast.profile_path" loading="lazy"/>
+                <div class="flex flex-col">
+                  <p class="text-white text-base lg:text-lg font-montserrat italic">{{ cast.name }}</p>
+                  <span class="text-white font-semibold text-sm  lg:text-base font-montserrat">as: {{ cast.character }}</span>
+                </div>
               </div>
-            </div>
-          }
+            }
+          </div>
         </div>
-      </div>
+      }
       @if (similars()!.length !== 0) {
-        <h2 class="font-medium text-3xl text-white font-montserrat mb-8">Top 12 Similar Movies</h2>
+        <h2 class="font-medium text-xl sm:text-2xl lg:text-3xl  text-white font-montserrat mb-8">Top 12 Similar Movies</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-8">
-        @for (movie of similars(); track movie.id) {
-          <a [routerLink]="['/movie', movie.id]" class="text-white rounded-2xl">
-            <div class="relative pb-[145%]">
-              @if (movie.poster_path) {
-                <img class="rounded-xl absolute w-full h-full object-cover" [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" loading="lazy" />
-              } @else {
-                <img class="rounded-xl absolute w-full h-full object-cover" src="placeholder.png" loading="lazy" />
-              }
-              </div>
-              <p class="text-xs font-bold mt-3">{{ movie.release_date | date:'mediumDate' }}</p>
-              <h2 class="mt-1 font-medium font-montserrat text-lg">
-                {{ movie.title }}
-              </h2>
-            </a>
+          @for (movie of similars(); track movie.id) {
+            <div class="pr-20 sm:pr-0">
+              <app-movie [movie]="movie" />
+            </div>
           }
         </div>
       }

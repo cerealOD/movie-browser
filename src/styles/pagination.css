@@ -14,6 +14,10 @@
   @apply !text-primary;
 }
 
+.p-paginator-page {
+  @apply text-sm sm:text-base !text-white;
+}
+
 .p-paginator-page.p-paginator-page-selected {
   @apply !bg-secondary !text-primary;
 }
@@ -22,15 +26,11 @@
   @apply !text-primary;
 }
 
-.p-paginator-page{
-  @apply !text-white;
-}
-
 .p-paginator .p-paginator-first {
-  @apply !text-white;
+  @apply hidden sm:block !text-white;
 }
 .p-paginator .p-paginator-last {
-  @apply !text-white;
+  @apply hidden sm:block !text-white;
 }
 
 .p-paginator .p-paginator-first:hover {

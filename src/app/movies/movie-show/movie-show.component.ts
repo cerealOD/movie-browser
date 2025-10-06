@@ -4,11 +4,12 @@ import { Movie } from '../../models/movie.model';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { IndexMovie } from '../../models/indexMovie.model';
-import { Credit } from '../../models/credit.model';
+import { Cast } from '../../models/cast.model';
+import { MovieComponent } from '../movie/movie.component';
 
 @Component({
   selector: 'app-movie-show',
-  imports: [DatePipe, RouterLink, DecimalPipe],
+  imports: [DatePipe, DecimalPipe, MovieComponent],
   templateUrl: './movie-show.component.html',
   styleUrl: './movie-show.component.css',
 })
@@ -16,7 +17,6 @@ export class MovieShowComponent {
   private moviesService = inject(MoviesService);
   private destroyRef = inject(DestroyRef);
   private route = inject(ActivatedRoute);
-  private router = inject(Router);
 
   movieId = signal<number>(0);
   isFetching = signal(false);
@@ -25,7 +25,7 @@ export class MovieShowComponent {
   error = signal('');
   movie = signal<Movie | undefined>(undefined);
   similars = signal<IndexMovie[] | undefined>([]);
-  cast = signal<Credit[] | undefined>([]);
+  cast = signal<Cast[] | undefined>([]);
   isAdding = signal(false);
   addError = signal<string | null>(null);
 
@@ -37,7 +37,7 @@ export class MovieShowComponent {
       this.movieId.set(parseInt(params.get('id') || ''));
       this.fetchMovie(this.movieId());
       this.fetchSimilars(this.movieId());
-      this.fetchCredits(this.movieId());
+      this.fetchCast(this.movieId());
     });
     this.destroyRef.onDestroy(() => {
       movieIdSub.unsubscribe();
@@ -74,9 +74,9 @@ export class MovieShowComponent {
     });
   }
 
-  private fetchCredits(movieId: number) {
+  private fetchCast(movieId: number) {
     this.isFetchingCredits.set(true);
-    this.moviesService.loadCredits(movieId).subscribe({
+    this.moviesService.loadCast(movieId).subscribe({
       next: (res) => {
         this.cast.set(
           res.cast.filter((value) => value.profile_path).slice(0, 12)
