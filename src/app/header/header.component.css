@@ -1,6 +1,5 @@
 .nav-link {
-  @apply font-medium text-white rounded-lg px-3 py-1;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  @apply font-medium text-white rounded-lg px-3 py-1 transition-basic;
 }
 .nav-link:hover {
   @apply bg-secondary text-primary;
@@ -10,8 +9,7 @@
 }
 
 .profile-link {
-  @apply block px-4 py-2 cursor-pointer;
-  transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  @apply block px-4 py-2 cursor-pointer transition-basic;
 }
 
 :host {

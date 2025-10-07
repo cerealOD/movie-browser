@@ -2,7 +2,7 @@
 </section>
 <section class="relative">
   <div class="w-full h-[500px] md:h-[600px] xl:h-[700px] 2xl:h-[900px] bg-center bg-no-repeat bg-cover" [style.background]="'linear-gradient(180deg, rgba(31,28,44,0.2) 10%, rgba(31,28,44,0.6) 29%, rgba(31,28,44,0.8) 39%, rgba(31,28,44,1) 65%)'"></div>
-  <div class="container mx-auto grid grid-cols-3 lg:grid-cols-4 gap-8 -mt-[350px] sm:-mt-[330px] md:-mt-[380px] xl:-mt-[450px] 2xl:-mt-[600px]">
+  <div class="container mx-auto grid grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-8 -mt-[350px] sm:-mt-[330px] md:-mt-[380px] xl:-mt-[450px] 2xl:-mt-[600px]">
     <div class="col-span-1 flex flex-col gap-4">
       @if (movie()!.poster_path) {
         <img class="rounded-xl flex-none" [src]="'https://image.tmdb.org/t/p/w500' + movie()!.poster_path" loading="lazy" />
@@ -28,7 +28,7 @@
         </a>
       </div>
     </div>
-    <div class="col-span-2 lg:col-span-3 flex flex-col mt-4">
+    <div class="col-span-2 lg:col-span-3 2xl:grid-cols-4 flex flex-col mt-4">
       <div>
         <h1 class="font-semibold text-2xl md:text-3xl lg:text-4xl text-white font-montserrat mb-3">
           {{movie()!.title}}

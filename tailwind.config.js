@@ -16,6 +16,12 @@ module.exports = {
           xl: "4rem",
         },
       },
+      transitionTimingFunction: {
+        basic: "cubic-bezier(0.4, 0, 0.2, 1)",
+      },
+      transitionDuration: {
+        basic: "250ms",
+      },
       colors: {
         primary: "#1F1C2C",
         secondary: "#A39CD0",
@@ -26,5 +32,16 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities, theme }) {
+      const newUtilities = {
+        ".transition-basic": {
+          transitionProperty: "all",
+          transitionDuration: theme("transitionDuration.basic"),
+          transitionTimingFunction: theme("transitionTimingFunction.basic"),
+        },
+      };
+      addUtilities(newUtilities);
+    },
+  ],
 };

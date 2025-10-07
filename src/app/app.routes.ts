@@ -12,7 +12,6 @@ import { CategoricalMoviesComponent } from './movies/categorical-movies/categori
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { AuthService } from './services/auth.service';
-import { ProfileComponent } from './profile/profile.component';
 import { MovieShowComponent } from './movies/movie-show/movie-show.component';
 import { SearchResultsComponent } from './movies/search-results/search-results.component';
 import { FavoritesComponent } from './profile/favorites/favorites.component';
