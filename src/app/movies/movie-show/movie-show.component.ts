@@ -7,7 +7,6 @@ import { IndexMovie } from '../../models/indexMovie.model';
 import { Cast } from '../../models/cast.model';
 import { MovieComponent } from '../movie/movie.component';
 import { AuthService } from '../../services/auth.service';
-import { async } from 'rxjs';
 
 @Component({
   selector: 'app-movie-show',

@@ -4,15 +4,13 @@ import {
   ElementRef,
   HostListener,
   inject,
-  signal,
   ViewChild,
 } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { AsyncPipe } from '@angular/common';
 import { HeaderService } from '../services/header.service';
-import { MoviesService } from '../services/movies.service';
-import { FormControl, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
@@ -27,7 +25,6 @@ export class HeaderComponent {
   auth = inject(AuthService);
   headerService = inject(HeaderService);
   searchQuery = '';
-  private moviesService = inject(MoviesService);
 
   initial = computed(
     () => this.auth.user()?.username.charAt(0).toUpperCase() ?? '?'
