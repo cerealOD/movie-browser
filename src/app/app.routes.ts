@@ -1,11 +1,4 @@
-import {
-  CanActivateFn,
-  CanMatch,
-  CanMatchFn,
-  RedirectCommand,
-  Router,
-  Routes,
-} from '@angular/router';
+import { CanActivateFn, Router, Routes } from '@angular/router';
 
 import { inject } from '@angular/core';
 import { CategoricalMoviesComponent } from './movies/categorical-movies/categorical-movies.component';
@@ -15,15 +8,6 @@ import { AuthService } from './services/auth.service';
 import { MovieShowComponent } from './movies/movie-show/movie-show.component';
 import { SearchResultsComponent } from './movies/search-results/search-results.component';
 import { FavoritesComponent } from './profile/favorites/favorites.component';
-
-const dummyCanMatch: CanMatchFn = (route, segments) => {
-  const router = inject(Router);
-  const shouldgetaccess = Math.random();
-  if (shouldgetaccess < 0.5) {
-    return true;
-  }
-  return new RedirectCommand(router.parseUrl('/unauthorized'));
-};
 
 const authGuard: CanActivateFn = (route, state) => {
   const auth = inject(AuthService);
