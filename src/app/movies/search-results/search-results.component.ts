@@ -14,7 +14,6 @@ import { PaginatorModule } from 'primeng/paginator';
 })
 export class SearchResultsComponent implements OnInit {
   query = '';
-  // page = 1;
   movies = signal<IndexMovie[] | undefined>(undefined);
   currentPage = signal(1);
   totalRecords = signal(1);
@@ -45,6 +44,7 @@ export class SearchResultsComponent implements OnInit {
       },
       error: (err: Error) => {
         this.error.set(err.message || 'Failed to load');
+        this.isFetching.set(false);
       },
       complete: () => {
         this.isFetching.set(false);
