@@ -12,16 +12,20 @@
         <label class="form-label" for="password">Password*</label>
         <input class="form-input" id="password" type="password" name="password" formControlName="password" placeholder="Password"
         />
+        <p class="italic text-sm text-medium text-opacity-70 text-primary">Must be at least 6 characters</p>
+        @if(form.get('passwords.password')?.touched && form.get('passwords.password')?.hasError('minlength')) {
+          <p class="control-error">Password must be at least 6 characters long</p>
+        }
       </div>
 
       <div class="flex flex-col gap-2">
         <label class="form-label" for="confirm-password">Confirm Password*</label>
         <input class="form-input" id="confirm-password" type="password"  name="confirm-password" formControlName="confirmPassword" placeholder="Password again"
         />
+        @if(form.get('passwords')?.touched && form.get('passwords')?.hasError('valuesNotEq')) {
+          <p class="control-error">Passwords do not match</p>
+        }
       </div>
-      @if(form.dirty && form.touched && form.invalid){
-        <p class="control-error">Invalid form</p>
-      }
     </div>
   </div>
   <button class="form-submit" [disabled]="form.invalid">Sign Up</button>

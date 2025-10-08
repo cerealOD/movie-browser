@@ -7,6 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 function equalValues(controlName1: string, controlName2: string) {
   return (control: AbstractControl) => {
@@ -30,6 +31,7 @@ function equalValues(controlName1: string, controlName2: string) {
 })
 export class SignupComponent {
   private auth = inject(AuthService);
+  private toast = inject(ToastService);
 
   form = new FormGroup({
     username: new FormControl('', {
@@ -57,13 +59,11 @@ export class SignupComponent {
     const password = this.form.value.passwords?.password!;
 
     this.auth.register(username, password).subscribe({
-      next: (res) => {
-        console.log('Registered:', res);
-        alert('Signup successful! You can now log in.');
+      next: () => {
+        this.toast.show('Signup successful! You can now log in.', 'success');
       },
       error: (err) => {
-        console.error(err);
-        alert(err.error?.error || 'Signup failed');
+        this.toast.show(err.error?.error || 'Signup failed', 'error');
       },
     });
   }

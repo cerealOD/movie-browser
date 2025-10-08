@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import {
-  AbstractControl,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
@@ -9,6 +8,7 @@ import {
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { HeaderService } from '../../services/header.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +21,7 @@ export class LoginComponent {
   private router = inject(Router);
   private auth = inject(AuthService);
   private headerService = inject(HeaderService);
+  private toast = inject(ToastService);
 
   form = new FormGroup({
     username: new FormControl('', {
@@ -40,11 +41,10 @@ export class LoginComponent {
         console.log('Logged in:', res);
         this.headerService.close();
         this.router.navigate(['/']);
-        // alert('Login successful!');
+        this.toast.show('Login successful!', 'success');
       },
       error: (err) => {
-        console.error(err);
-        // alert(err.error?.error || 'Login failed');
+        this.toast.show(err.error?.error || 'Login failed', 'error');
       },
     });
   }

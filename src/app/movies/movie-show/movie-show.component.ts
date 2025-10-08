@@ -8,6 +8,7 @@ import { Cast } from '../../models/cast.model';
 import { MovieComponent } from '../movie/movie.component';
 import { AuthService } from '../../services/auth.service';
 import { FetchDataService } from '../../services/fetch-state.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-movie-show',
@@ -22,6 +23,7 @@ export class MovieShowComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
   private fetchState = inject(FetchDataService);
+  private toast = inject(ToastService);
 
   isFetching = this.fetchState.isFetching;
   movieId = signal<number>(0);
@@ -127,8 +129,9 @@ export class MovieShowComponent {
         const sub = this.moviesService
           .removeMovieFromUserFavorites(movie.id)
           .subscribe({
-            next: () => console.log('Removed from favorites'),
-            error: (err: Error) => console.error(err.message),
+            next: () => this.toast.show('Removed from favorites!', 'success'),
+            error: (err: Error) =>
+              this.toast.show(err.message || 'Failed to remove', 'error'),
           });
         this.destroyRef.onDestroy(() => sub.unsubscribe());
       } else {
@@ -136,8 +139,11 @@ export class MovieShowComponent {
         const sub = this.moviesService
           .addMovieToUserFavorites(indexMovie)
           .subscribe({
-            next: () => console.log('Added to favorites'),
-            error: (err: Error) => console.error(err.message),
+            next: () => {
+              this.toast.show('Added to favorites!', 'success');
+            },
+            error: (err: Error) =>
+              this.toast.show(err.message || 'Failed to add', 'error'),
           });
         this.destroyRef.onDestroy(() => sub.unsubscribe());
       }

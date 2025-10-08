@@ -17,3 +17,7 @@
     @apply w-full mt-8 shadow-lg px-4 py-3 bg-primary rounded-lg text-white font-semibold hover:bg-opacity-70 disabled:bg-opacity-50 disabled:text-opacity-50;
   }
 }
+
+.control-error {
+  @apply text-[#a80404] text-sm font-medium;
+}

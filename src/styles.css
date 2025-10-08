@@ -11,10 +11,6 @@ body {
   background: linear-gradient(180deg, #1f1c2c 0%, #1f1c2c 100%);
 }
 
-.control-error {
-  @apply text-[#a80404];
-}
-
 .fallback-text {
   @apply text-white text-xl;
 }

@@ -1,0 +1,14 @@
+<div class="fixed top-28 right-8 flex flex-col gap-2 z-50">
+  @for (toast of toastService.messages$ | async; track toast) {
+    <div
+      class="px-4 py-2 rounded-2xl shadow-lg text-white animate-fade-in"
+      [class]="{
+        'bg-green-600': toast.type === 'success',
+        'bg-red-600': toast.type === 'error',
+        'bg-blue-600': toast.type === 'info'
+      }"
+    >
+      {{ toast.text }}
+    </div>
+  }
+</div>

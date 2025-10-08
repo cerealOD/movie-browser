@@ -7,6 +7,7 @@ import { RouterOutlet } from '@angular/router';
 import { FooterComponent } from './footer/footer.component';
 import { AuthService } from './services/auth.service';
 import { MoviesService } from './services/movies.service';
+import { ToastComponent } from './toast/toast/toast.component';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ import { MoviesService } from './services/movies.service';
     HeaderComponent,
     RouterOutlet,
     FooterComponent,
+    ToastComponent,
   ],
 })
 export class AppComponent {
