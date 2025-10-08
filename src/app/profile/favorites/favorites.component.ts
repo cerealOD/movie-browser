@@ -2,6 +2,7 @@ import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { MoviesComponent } from '../../movies/movies.component';
 import { MoviesContainerComponent } from '../../movies/movies-container/movies-container.component';
 import { MoviesService } from '../../services/movies.service';
+import { FetchDataService } from '../../services/fetch-state.service';
 
 @Component({
   selector: 'app-favorites',
@@ -12,10 +13,11 @@ import { MoviesService } from '../../services/movies.service';
 export class FavoritesComponent {
   private moviesService = inject(MoviesService);
   private destroyRef = inject(DestroyRef);
+  private fetchState = inject(FetchDataService);
+  isFetching = this.fetchState.isFetching;
   movies = this.moviesService.loadedUserFavorites;
   currentPage = signal(1);
   totalRecords = signal(1);
-  isFetching = signal(false);
   error = signal('');
 
   ngOnInit() {

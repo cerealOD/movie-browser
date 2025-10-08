@@ -14,6 +14,7 @@ import { MoviesService } from '../../services/movies.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TitleizePipe } from '../../pipes/titleize.pipe';
 import { PaginatorModule } from 'primeng/paginator';
+import { FetchDataService } from '../../services/fetch-state.service';
 
 @Component({
   selector: 'app-popular-movies',
@@ -32,7 +33,6 @@ export class CategoricalMoviesComponent implements OnInit {
   movies = signal<IndexMovie[] | undefined>(undefined);
   currentPage = signal(1);
   totalRecords = signal(1);
-  isFetching = signal(false);
   error = signal('');
 
   private moviesService = inject(MoviesService);
@@ -41,6 +41,8 @@ export class CategoricalMoviesComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private lastLoadedCategory = '';
   private lastLoadedPage = 0;
+  private fetchState = inject(FetchDataService);
+  isFetching = this.fetchState.isFetching;
 
   ngOnInit() {
     const categorySub = this.route.paramMap.subscribe((params) => {
@@ -97,6 +99,7 @@ export class CategoricalMoviesComponent implements OnInit {
       },
       error: (err: Error) => {
         this.error.set(err.message || 'Failed to load');
+        this.isFetching.set(false);
       },
       complete: () => {
         this.isFetching.set(false);
@@ -111,7 +114,7 @@ export class CategoricalMoviesComponent implements OnInit {
   });
 
   loadPageFromPaginator(event: any) {
-    const page = event.page + 1; // PrimeNG is zero-based
+    const page = event.page + 1; // PrimeNG is zero based
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { page },

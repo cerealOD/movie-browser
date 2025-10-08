@@ -4,10 +4,13 @@
   <div class="w-full h-[500px] md:h-[600px] xl:h-[700px] 2xl:h-[900px] bg-center bg-no-repeat bg-cover" [style.background]="'linear-gradient(180deg, rgba(31,28,44,0.2) 10%, rgba(31,28,44,0.6) 29%, rgba(31,28,44,0.8) 39%, rgba(31,28,44,1) 65%)'"></div>
   <div class="container mx-auto grid grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-8 -mt-[350px] sm:-mt-[330px] md:-mt-[380px] xl:-mt-[450px] 2xl:-mt-[600px]">
     <div class="col-span-1 flex flex-col gap-4">
-      @if (movie()?.poster_path) {
-        <img class="rounded-xl flex-none" [src]="'https://image.tmdb.org/t/p/w500' + movie()?.poster_path" loading="lazy" />
+      @if (isFetching()) {
       } @else {
-        <img class="rounded-xl w-[250px]" src="placeholder.png" loading="lazy" />
+        @if (movie()?.poster_path) {
+          <img class="rounded-xl flex-none" [src]="'https://image.tmdb.org/t/p/w500' + movie()?.poster_path" loading="lazy" />
+        } @else {
+          <img class="rounded-xl w-[250px]" src="placeholder.png" loading="lazy" />
+        }
       }
       <div class="flex flex-col sm:flex-row items-center justify-between gap-2">
         <button class="favorite-btn w-full sm:w-fit sm:flex-1" (click)="toggleFavorite()">
@@ -102,7 +105,7 @@
       <p class="lg:hidden text-white md:text-lg leading-1 font-montserrat mb-8">
         {{movie()?.overview}}
       </p>
-      @if (cast()!.length !== 0) {
+      @if (cast()?.length !== 0) {
         <div class="mb-16">
           <h2 class="font-medium text-xl sm:text-2xl lg:text-3xl text-white font-montserrat mb-8">Cast & Credits</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -118,7 +121,7 @@
           </div>
         </div>
       }
-      @if (similars()!.length !== 0) {
+      @if (similars()?.length !== 0) {
         <h2 class="font-medium text-xl sm:text-2xl lg:text-3xl  text-white font-montserrat mb-8">Top 12 Similar Movies</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-8">
           @for (movie of similars(); track movie.id) {

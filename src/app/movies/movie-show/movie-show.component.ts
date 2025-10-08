@@ -7,6 +7,7 @@ import { IndexMovie } from '../../models/indexMovie.model';
 import { Cast } from '../../models/cast.model';
 import { MovieComponent } from '../movie/movie.component';
 import { AuthService } from '../../services/auth.service';
+import { FetchDataService } from '../../services/fetch-state.service';
 
 @Component({
   selector: 'app-movie-show',
@@ -20,9 +21,10 @@ export class MovieShowComponent {
   private route = inject(ActivatedRoute);
   private auth = inject(AuthService);
   private router = inject(Router);
+  private fetchState = inject(FetchDataService);
 
+  isFetching = this.fetchState.isFetching;
   movieId = signal<number>(0);
-  isFetching = signal(false);
   isFetchingSimilars = signal(false);
   isFetchingCredits = signal(false);
   error = signal('');
@@ -56,6 +58,7 @@ export class MovieShowComponent {
       },
       error: (err: Error) => {
         this.error.set(err.message || 'Failed to load');
+        this.isFetching.set(false);
       },
       complete: () => {
         this.isFetching.set(false);
@@ -71,6 +74,7 @@ export class MovieShowComponent {
       },
       error: (err: Error) => {
         this.error.set(err.message || 'Failed to load similar movies');
+        this.isFetchingSimilars.set(false);
       },
       complete: () => {
         this.isFetchingSimilars.set(false);
@@ -83,11 +87,13 @@ export class MovieShowComponent {
     this.moviesService.loadCast(movieId).subscribe({
       next: (res) => {
         this.cast.set(
+          // only get cast with existing profile picture
           res.cast.filter((value) => value.profile_path).slice(0, 12)
         );
       },
       error: (err: Error) => {
         this.error.set(err.message || 'Failed to load cast');
+        this.isFetchingCredits.set(false);
       },
       complete: () => {
         this.isFetchingCredits.set(false);

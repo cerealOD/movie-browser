@@ -5,6 +5,7 @@ import { IndexMovie } from '../../models/indexMovie.model';
 import { MoviesContainerComponent } from '../movies-container/movies-container.component';
 import { MoviesComponent } from '../movies.component';
 import { PaginatorModule } from 'primeng/paginator';
+import { FetchDataService } from '../../services/fetch-state.service';
 
 @Component({
   selector: 'app-search-results',
@@ -17,12 +18,14 @@ export class SearchResultsComponent implements OnInit {
   movies = signal<IndexMovie[] | undefined>(undefined);
   currentPage = signal(1);
   totalRecords = signal(1);
-  isFetching = signal(false);
   error = signal('');
 
   private moviesService = inject(MoviesService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private fetchState = inject(FetchDataService);
+
+  isFetching = this.fetchState.isFetching;
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {

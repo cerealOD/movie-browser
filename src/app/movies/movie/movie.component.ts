@@ -10,6 +10,7 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { IndexMovie } from '../../models/indexMovie.model';
 import { MoviesService } from '../../services/movies.service';
+import { FetchDataService } from '../../services/fetch-state.service';
 
 @Component({
   selector: 'app-movie',
@@ -23,6 +24,8 @@ export class MovieComponent {
   private moviesService = inject(MoviesService);
   private destroyRef = inject(DestroyRef);
   private router = inject(Router);
+  private fetchState = inject(FetchDataService);
+  isFetching = this.fetchState.isFetching;
 
   ngOnInit() {
     this.router.events.subscribe(() => {
