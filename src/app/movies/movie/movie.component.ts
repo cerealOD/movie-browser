@@ -27,7 +27,7 @@ export class MovieComponent {
   ngOnInit() {
     this.router.events.subscribe(() => {
       const url = this.router.url;
-      this.currentRoute.set(url.split('/')[1].split('?')[0]);
+      this.currentRoute.set(url.split('/')[1]);
     });
   }
 

@@ -25,6 +25,7 @@ export class FavoritesComponent {
       error: (error: Error) => {
         // to get the original error message
         this.error.set(error.message);
+        this.isFetching.set(false);
         // this.error.set('Something went wrong fetching data');
       },
       complete: () => {

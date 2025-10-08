@@ -1,16 +1,50 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MoviesService } from '../../services/movies.service';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { SearchResultsComponent } from './search-results.component';
+import { IndexMovie } from '../../models/indexMovie.model';
+import { BehaviorSubject, of, throwError } from 'rxjs';
+
+const queryParamsSubject = new BehaviorSubject({ query: 'matrix', page: 2 });
+
+const activatedRouteStub = {
+  queryParams: queryParamsSubject.asObservable(),
+} as any;
+
+const fakeResults: IndexMovie[] = [
+  {
+    id: 1,
+    title: 'Movie 1',
+    poster_path: 'path.jpg',
+    release_date: '2025-10-08',
+    vote_average: 7,
+    adult: false,
+    genre_ids: [],
+  },
+];
 
 describe('SearchResultsComponent', () => {
   let component: SearchResultsComponent;
   let fixture: ComponentFixture<SearchResultsComponent>;
+  let moviesServiceSpy: jasmine.SpyObj<MoviesService>;
 
   beforeEach(async () => {
+    moviesServiceSpy = jasmine.createSpyObj('MoviesService', ['searchMovies']);
+    moviesServiceSpy.searchMovies.and.returnValue(
+      of({ page: 1, results: fakeResults, total_pages: 3, total_results: 50 })
+    );
+
     await TestBed.configureTestingModule({
-      imports: [SearchResultsComponent]
-    })
-    .compileComponents();
+      imports: [SearchResultsComponent],
+      providers: [
+        provideRouter([]),
+        { provide: MoviesService, useValue: moviesServiceSpy },
+        { provide: ActivatedRoute, useValue: activatedRouteStub },
+      ],
+    }).compileComponents();
+    const router = TestBed.inject(Router);
+    spyOn(router, 'navigate');
 
     fixture = TestBed.createComponent(SearchResultsComponent);
     component = fixture.componentInstance;
@@ -19,5 +53,33 @@ describe('SearchResultsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should fetch search results on init', () => {
+    queryParamsSubject.next({ query: 'matrix', page: 2 });
+    expect(moviesServiceSpy.searchMovies).toHaveBeenCalledWith('matrix', 2);
+    expect(component.movies()).toEqual(fakeResults);
+    expect(component.totalRecords()).toBe(50);
+    expect(component.isFetching()).toBeFalse();
+  });
+
+  it('should set error signal if search fails', () => {
+    // return observable that errors
+    moviesServiceSpy.searchMovies.and.returnValue(
+      throwError(() => new Error('Search failed'))
+    );
+
+    const errorFixture = TestBed.createComponent(SearchResultsComponent);
+    const errorComponent = errorFixture.componentInstance;
+
+    errorFixture.detectChanges();
+
+    expect(errorComponent.error()).toBe('Search failed');
+    expect(errorComponent.isFetching()).toBeFalse();
+  });
+
+  it('should compute cappedTotalRecords correctly', () => {
+    component.totalRecords.set(10000); // higher than max
+    expect(component.cappedTotalRecords()).toBe(500 * 20); // 500 pages * 20 items
   });
 });
