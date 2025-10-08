@@ -50,7 +50,7 @@ export class HeaderComponent {
   logout() {
     this.auth.logout();
     this.headerService.close();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth/login']);
   }
 
   onSearch() {

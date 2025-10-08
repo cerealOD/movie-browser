@@ -7,7 +7,7 @@ import { SignupComponent } from './auth/signup/signup.component';
 import { AuthService } from './services/auth.service';
 import { MovieShowComponent } from './movies/movie-show/movie-show.component';
 import { SearchResultsComponent } from './movies/search-results/search-results.component';
-import { FavoritesComponent } from './profile/favorites/favorites.component';
+import { FavoritesComponent } from './favorites/favorites.component';
 
 const authGuard: CanActivateFn = (route, state) => {
   const auth = inject(AuthService);
@@ -18,7 +18,7 @@ const authGuard: CanActivateFn = (route, state) => {
   }
 
   // redirect to login if not logged in
-  router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+  router.navigate(['/auth/login'], { queryParams: { returnUrl: state.url } });
   return false;
 };
 
@@ -29,16 +29,15 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'login',
-    component: LoginComponent,
-  },
-  {
-    path: 'register',
-    component: SignupComponent,
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.routes').then((m) => m.authRoutes),
   },
   {
     path: 'favorites',
-    component: FavoritesComponent,
+    loadComponent: () =>
+      import('./favorites/favorites.component').then(
+        (mod) => mod.FavoritesComponent
+      ), // lazy load this route
     canActivate: [authGuard],
   },
 
@@ -52,6 +51,9 @@ export const routes: Routes = [
   },
   {
     path: 'search',
-    component: SearchResultsComponent,
+    loadComponent: () =>
+      import('./movies/search-results/search-results.component').then(
+        (mod) => mod.SearchResultsComponent
+      ), // lazy load this route
   },
 ];

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FavoritesComponent } from './favorites.component';
-import { MoviesService } from '../../services/movies.service';
+import { FavoritesComponent } from '../favorites/favorites.component';
+import { MoviesService } from '../services/movies.service';
 import { signal } from '@angular/core';
 import { of, throwError } from 'rxjs';
 import { provideRouter } from '@angular/router';

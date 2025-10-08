@@ -1,8 +1,8 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { MoviesComponent } from '../../movies/movies.component';
-import { MoviesContainerComponent } from '../../movies/movies-container/movies-container.component';
-import { MoviesService } from '../../services/movies.service';
-import { FetchDataService } from '../../services/fetch-state.service';
+import { MoviesComponent } from '../movies/movies.component';
+import { MoviesContainerComponent } from '../movies/movies-container/movies-container.component';
+import { MoviesService } from '../services/movies.service';
+import { FetchDataService } from '../services/fetch-state.service';
 
 @Component({
   selector: 'app-favorites',
