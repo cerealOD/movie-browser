@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MoviesService } from '../../services/movies.service';
-import { provideRouter } from '@angular/router';
-
+import { provideRouter, Router } from '@angular/router';
 import { MovieComponent } from './movie.component';
 import { IndexMovie } from '../../models/indexMovie.model';
 import { Component } from '@angular/core';
+import { By } from '@angular/platform-browser';
+import { of, Subject } from 'rxjs';
 
 @Component({
   template: `<app-movie [movie]="testMovie"></app-movie>`,
@@ -23,17 +24,20 @@ class TestHostComponent {
   };
 }
 
-describe('MovieComponent', () => {
+describe('MovieComponent (Host)', () => {
   let moviesServiceSpy: jasmine.SpyObj<MoviesService>;
   let hostFixture: ComponentFixture<TestHostComponent>;
   let hostComponent: TestHostComponent;
+  let movieDebugEl: any;
 
   beforeEach(async () => {
-    // mock injected services
     moviesServiceSpy = jasmine.createSpyObj('MoviesService', [
       'removeMovieFromUserFavorites',
       'addMovieToUserFavorites',
+      'isFavorite',
     ]);
+
+    moviesServiceSpy.isFavorite.and.returnValue(false);
 
     await TestBed.configureTestingModule({
       imports: [TestHostComponent],
@@ -45,10 +49,72 @@ describe('MovieComponent', () => {
 
     hostFixture = TestBed.createComponent(TestHostComponent);
     hostComponent = hostFixture.componentInstance;
+    movieDebugEl = hostFixture.debugElement.query(By.directive(MovieComponent));
+
     hostFixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create host component', () => {
     expect(hostComponent).toBeTruthy();
+  });
+
+  it('should render movie title and release date', () => {
+    const titleEl = movieDebugEl.nativeElement.querySelector('h2');
+    const dateEl = movieDebugEl.nativeElement.querySelector('p');
+
+    expect(titleEl.textContent).toContain(hostComponent.testMovie.title);
+    expect(dateEl.textContent).toContain('Sep 30, 2025'); // formatted by date pipe
+  });
+
+  it('should show favorite button if currentRoute is "favorites"', () => {
+    const movieComp = movieDebugEl.componentInstance as MovieComponent;
+    movieComp.currentRoute.set('favorites');
+    hostFixture.detectChanges();
+
+    const button = movieDebugEl.query(By.css('button.favorite-btn'));
+    expect(button).toBeTruthy();
+  });
+
+  it('should hide favorite button if currentRoute is not "favorites"', () => {
+    const movieComp = movieDebugEl.componentInstance as MovieComponent;
+    movieComp.currentRoute.set('popular');
+    hostFixture.detectChanges();
+
+    const button = movieDebugEl.query(By.css('button.favorite-btn'));
+    expect(button).toBeFalsy();
+  });
+
+  it('should call addMovieToUserFavorites when favorite button clicked', () => {
+    const movieComp = movieDebugEl.componentInstance as MovieComponent;
+    movieComp.currentRoute.set('favorites');
+    moviesServiceSpy.isFavorite.and.returnValue(false);
+    moviesServiceSpy.addMovieToUserFavorites.and.returnValue(of({}));
+
+    hostFixture.detectChanges();
+
+    const button = movieDebugEl.query(By.css('button.favorite-btn'));
+    button.nativeElement.click();
+    hostFixture.detectChanges();
+
+    expect(moviesServiceSpy.addMovieToUserFavorites).toHaveBeenCalledWith(
+      hostComponent.testMovie
+    );
+  });
+
+  it('should call removeMovieFromUserFavorites if already favorite', () => {
+    const movieComp = movieDebugEl.componentInstance as MovieComponent;
+    movieComp.currentRoute.set('favorites');
+    moviesServiceSpy.isFavorite.and.returnValue(true);
+    moviesServiceSpy.removeMovieFromUserFavorites.and.returnValue(of({}));
+
+    hostFixture.detectChanges();
+
+    const button = movieDebugEl.query(By.css('button.favorite-btn'));
+    button.nativeElement.click();
+    hostFixture.detectChanges();
+
+    expect(moviesServiceSpy.removeMovieFromUserFavorites).toHaveBeenCalledWith(
+      hostComponent.testMovie.id
+    );
   });
 });

@@ -30,6 +30,7 @@ export class HeaderComponent {
     () => this.auth.user()?.username.charAt(0).toUpperCase() ?? '?'
   );
 
+  // close dropdown when clicking outside
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {
     if (!this.dropdownWrapper) return;
