@@ -29,4 +29,9 @@ describe('MovieComponent', () => {
   it('should create', () => {
     expect(hostComponent).toBeTruthy();
   });
+
+  it('should render the title', () => {
+    const compiled = hostFixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('h2')?.textContent).toContain('Title');
+  });
 });
