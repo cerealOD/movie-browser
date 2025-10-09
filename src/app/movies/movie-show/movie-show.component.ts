@@ -153,7 +153,7 @@ export class MovieShowComponent {
         this.destroyRef.onDestroy(() => sub.unsubscribe());
       }
     } else {
-      this.router.navigate(['/auth/login']);
+      this.toast.show('Must login to add favorites', 'info');
     }
   }
 }

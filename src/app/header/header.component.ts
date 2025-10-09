@@ -4,6 +4,7 @@ import {
   ElementRef,
   HostListener,
   inject,
+  signal,
   ViewChild,
 } from '@angular/core';
 import {
@@ -72,6 +73,7 @@ export class HeaderComponent {
 
   onSearch() {
     if (!this.searchQuery.trim()) return;
+    this.headerService.toggleMenu();
 
     this.router.navigateByUrl(`/search?query=${this.searchQuery}&page=1`);
   }

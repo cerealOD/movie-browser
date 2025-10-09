@@ -5,6 +5,9 @@
 </app-header>
 
 <main class="flex-1">
+  @if(headerService.isMenuOpen()) {
+    <div class="blur-bg"></div>
+  }
   <router-outlet/>
   <app-toast></app-toast>
 </main>

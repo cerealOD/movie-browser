@@ -11,6 +11,7 @@ import { Router, RouterLink } from '@angular/router';
 import { IndexMovie } from '../../models/indexMovie.model';
 import { MoviesService } from '../../services/movies.service';
 import { FetchDataService } from '../../services/fetch-state.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-movie',
@@ -25,6 +26,7 @@ export class MovieComponent {
   private destroyRef = inject(DestroyRef);
   private router = inject(Router);
   private fetchState = inject(FetchDataService);
+  private toast = inject(ToastService);
   isFetching = this.fetchState.isFetching;
 
   ngOnInit() {
@@ -47,14 +49,14 @@ export class MovieComponent {
       const sub = this.moviesService
         .removeMovieFromUserFavorites(movie.id)
         .subscribe({
-          next: () => console.log('Removed from favorites'),
+          next: () => this.toast.show('Removed from favorites!', 'success'),
           error: (err: Error) => console.error(err.message),
         });
       this.destroyRef.onDestroy(() => sub.unsubscribe());
     } else {
       // Add
       const sub = this.moviesService.addMovieToUserFavorites(movie).subscribe({
-        next: () => console.log('Added to favorites'),
+        next: () => this.toast.show('Added to favorites!', 'success'),
         error: (err: Error) => console.error(err.message),
       });
       this.destroyRef.onDestroy(() => sub.unsubscribe());

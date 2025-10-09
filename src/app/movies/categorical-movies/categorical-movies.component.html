@@ -9,7 +9,7 @@
     @if (movies()) {
     <app-movies [movies]="movies()!"/>
 
-    <div class="mt-12 flex justify-center">
+    <div class="mt-12 md:mt-16 flex justify-center">
       <p-paginator
         [rows]="20"
         [totalRecords]="cappedTotalRecords()"

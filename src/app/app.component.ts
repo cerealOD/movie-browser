@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, Renderer2 } from '@angular/core';
 
 import { ErrorService } from './shared/error.service';
 import { ErrorModalComponent } from './shared/modal/error-modal/error-modal.component';
@@ -8,6 +8,7 @@ import { FooterComponent } from './footer/footer.component';
 import { AuthService } from './services/auth.service';
 import { MoviesService } from './services/movies.service';
 import { ToastComponent } from './toast/toast/toast.component';
+import { HeaderService } from './services/header.service';
 
 @Component({
   selector: 'app-root',
@@ -24,14 +25,23 @@ import { ToastComponent } from './toast/toast/toast.component';
 })
 export class AppComponent {
   private errorService = inject(ErrorService);
-  error = this.errorService.error;
   private auth = inject(AuthService);
   private movies = inject(MoviesService);
+  private renderer = inject(Renderer2);
+  error = this.errorService.error;
+  headerService = inject(HeaderService);
 
   constructor() {
     effect(() => {
       if (this.auth.isLoggedIn()) {
         this.movies.loadUserFavorites().subscribe();
+      }
+    });
+    effect(() => {
+      if (this.headerService.isMenuOpen()) {
+        this.renderer.addClass(document.body, 'overflow-hidden');
+      } else {
+        this.renderer.removeClass(document.body, 'overflow-hidden');
       }
     });
   }
