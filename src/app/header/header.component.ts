@@ -6,11 +6,17 @@ import {
   inject,
   ViewChild,
 } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  NavigationEnd,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+} from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { AsyncPipe } from '@angular/common';
 import { HeaderService } from '../services/header.service';
 import { FormsModule } from '@angular/forms';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -29,6 +35,17 @@ export class HeaderComponent {
   initial = computed(
     () => this.auth.user()?.username.charAt(0).toUpperCase() ?? '?'
   );
+
+  ngOnInit() {
+    // Clear search when leaving search page
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        if (!event.url.startsWith('/search')) {
+          this.searchQuery = '';
+        }
+      });
+  }
 
   // close dropdown when clicking outside
   @HostListener('document:click', ['$event'])

@@ -28,10 +28,7 @@ export class MoviesService {
   }
 
   loadMovie(movieId: number) {
-    return this.fetchMovie(
-      `${environment.apiUrl}/movie/${movieId}`,
-      'Something went wrong fetching the requested movie'
-    );
+    return this.fetchMovie(`${environment.apiUrl}/movie/${movieId}`);
   }
 
   loadUserFavorites() {
@@ -116,11 +113,11 @@ export class MoviesService {
     );
   }
 
-  private fetchMovie(url: string, errorMessage: string) {
+  private fetchMovie(url: string) {
     return this.httpClient.get<Movie>(url).pipe(
       catchError((error) => {
         console.log(error);
-        return throwError(() => new Error(errorMessage));
+        return throwError(() => error);
       })
     );
   }

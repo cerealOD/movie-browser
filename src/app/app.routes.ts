@@ -8,6 +8,7 @@ import { AuthService } from './services/auth.service';
 import { MovieShowComponent } from './movies/movie-show/movie-show.component';
 import { SearchResultsComponent } from './movies/search-results/search-results.component';
 import { FavoritesComponent } from './favorites/favorites.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 const authGuard: CanActivateFn = (route, state) => {
   const auth = inject(AuthService);
@@ -56,4 +57,6 @@ export const routes: Routes = [
         (mod) => mod.SearchResultsComponent
       ), // lazy load this route
   },
+  { path: 'not-found', component: NotFoundComponent },
+  { path: '**', redirectTo: '/not-found' },
 ];

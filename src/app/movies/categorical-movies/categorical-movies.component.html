@@ -1,23 +1,22 @@
-<app-movies-container title="{{ category() | titleize}} Movies">
-  @if (isFetching() && !error()) {
-    <!-- <i class="pi pi-spin pi-spinner text-white" style="font-size: 2rem"></i> -->
-  }
+<app-movies-container [title]="movies()?.length !== 0
+  ? (category() | titleize) + ' Movies'
+  : 'No ' + (category() | titleize) + ' movies could be found'">
 
-  @if (error()) {
-    <p class="mt-4 fallback-text">{{ error() }}</p>
-  }
-  @if (movies()) {
-  <app-movies [movies]="movies()!"/>
+  @if (movies()?.length !== 0){
+    @if (error()) {
+      <p class="mt-4 fallback-text">{{ error() }}</p>
+    }
+    @if (movies()) {
+    <app-movies [movies]="movies()!"/>
 
-  <div class="mt-12 flex justify-center">
-    <p-paginator
-      [rows]="20"
-      [totalRecords]="cappedTotalRecords()"
-      [first]="(currentPage() - 1) * 20"
-      (onPageChange)="loadPageFromPaginator($event)">
-    </p-paginator>
-  </div>
-  } @else if (movies()?.length === 0) {
-  <p class="mt-4 fallback-text">Unfortunately, no {{category()}}movies could be found.</p>
+    <div class="mt-12 flex justify-center">
+      <p-paginator
+        [rows]="20"
+        [totalRecords]="cappedTotalRecords()"
+        [first]="(currentPage() - 1) * 20"
+        (onPageChange)="loadPageFromPaginator($event)">
+      </p-paginator>
+    </div>
+    }
   }
 </app-movies-container>

@@ -9,6 +9,7 @@ import { MovieComponent } from '../movie/movie.component';
 import { AuthService } from '../../services/auth.service';
 import { FetchDataService } from '../../services/fetch-state.service';
 import { ToastService } from '../../services/toast.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-movie-show',
@@ -58,8 +59,12 @@ export class MovieShowComponent {
       next: (res) => {
         this.movie.set(res);
       },
-      error: (err: Error) => {
-        this.error.set(err.message || 'Failed to load');
+      error: (err: HttpErrorResponse) => {
+        if (err.status === 404) {
+          this.router.navigateByUrl('/not-found');
+        } else {
+          this.error.set(err.message || 'Failed to load');
+        }
         this.isFetching.set(false);
       },
       complete: () => {
