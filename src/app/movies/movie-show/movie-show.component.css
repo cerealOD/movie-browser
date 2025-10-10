@@ -1,3 +1,28 @@
 .info-card{
   @apply flex items-center gap-3 bg-white/10 rounded-xl p-3 w-52;
 }
+
+.backdrop-linear-gradient {
+  @apply w-full h-[600px] sm:h-[500px] md:h-[600px] xl:h-[700px] 2xl:h-[900px] bg-center bg-no-repeat bg-cover;
+  background: linear-gradient(180deg, rgba(31,28,44,0.2) 10%, rgba(31,28,44,0.6) 20%, rgba(31,28,44,0.8) 30%, rgba(31,28,44,1) 50%);
+
+  @media (min-width: 640px) {
+    background: linear-gradient(180deg, rgba(31,28,44,0.2) 10%, rgba(31,28,44,0.6) 30%, rgba(31,28,44,0.8) 40%, rgba(31,28,44,1) 60%);
+  }
+
+  @media (min-width: 768px) {
+    background: linear-gradient(180deg, rgba(31,28,44,0.2) 10%, rgba(31,28,44,0.6) 30%, rgba(31,28,44,0.8) 40%, rgba(31,28,44,1) 65%);
+  }
+
+  @media (min-width: 1024px) {
+    background: linear-gradient(180deg, rgba(31,28,44,0.2) 10%, rgba(31,28,44,0.6) 40%, rgba(31,28,44,0.8) 55%, rgba(31,28,44,1) 80%);
+  }
+
+  @media (min-width: 1440px) {
+    background: linear-gradient(180deg, rgba(31,28,44,0.2) 10%, rgba(31,28,44,0.6) 35%, rgba(31,28,44,0.8) 50%, rgba(31,28,44,1) 80%);
+  }
+
+  @media (min-width: 1536px) {
+    background: linear-gradient(180deg, rgba(31,28,44,0.2) 10%, rgba(31,28,44,0.6) 35%, rgba(31,28,44,0.8) 50%, rgba(31,28,44,1) 70%);
+  }
+}
