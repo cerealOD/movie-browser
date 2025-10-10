@@ -4,21 +4,25 @@ import { AuthService } from '../../services/auth.service';
 
 import { SignupComponent } from './signup.component';
 import { of, throwError } from 'rxjs';
+import { ToastService } from '../../services/toast.service';
 
 describe('SignupComponent', () => {
   let component: SignupComponent;
   let fixture: ComponentFixture<SignupComponent>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let toastSpy: jasmine.SpyObj<ToastService>;
 
   beforeEach(async () => {
     // mock injected services
     authServiceSpy = jasmine.createSpyObj('AuthService', ['register']);
+    toastSpy = jasmine.createSpyObj('ToastService', ['show']);
 
     await TestBed.configureTestingModule({
       imports: [SignupComponent],
       providers: [
         provideHttpClientTesting(),
         { provide: AuthService, useValue: authServiceSpy },
+        { provide: ToastService, useValue: toastSpy },
       ],
     }).compileComponents();
 
@@ -64,7 +68,6 @@ describe('SignupComponent', () => {
   it('should handle register error', () => {
     const mockError = { error: { error: 'Signup failed' } };
     authServiceSpy.register.and.returnValue(throwError(() => mockError));
-    spyOn(window, 'alert');
 
     component.form.setValue({
       username: 'test',
@@ -77,6 +80,6 @@ describe('SignupComponent', () => {
     component.onSubmit();
 
     expect(authServiceSpy.register).toHaveBeenCalled();
-    expect(window.alert).toHaveBeenCalledWith('Signup failed');
+    expect(toastSpy.show).toHaveBeenCalledWith('Signup failed', 'error');
   });
 });

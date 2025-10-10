@@ -19,6 +19,8 @@ describe('HeaderComponent', () => {
       'close',
       'dropdownOpen',
       'toggle',
+      'isMenuOpen',
+      'toggleMenu',
     ]);
 
     authServiceSpy.user.and.returnValue({ username: 'alice' }); //mock user signal
@@ -53,12 +55,12 @@ describe('HeaderComponent', () => {
     expect(component.initial()).toBe('A');
   });
 
-  it('should call logout and navigate to /login', () => {
+  it('should call logout and navigate to /auth/login', () => {
     component.logout();
 
     expect(authServiceSpy.logout).toHaveBeenCalled();
     expect(headerServiceSpy.close).toHaveBeenCalled();
-    expect(router.navigate).toHaveBeenCalledWith(['/login']);
+    expect(router.navigate).toHaveBeenCalledWith(['/auth/login']);
   });
 
   it('should not search when query is empty', () => {

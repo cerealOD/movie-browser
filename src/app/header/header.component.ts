@@ -4,7 +4,6 @@ import {
   ElementRef,
   HostListener,
   inject,
-  signal,
   ViewChild,
 } from '@angular/core';
 import {
