@@ -1,12 +1,19 @@
 <header class="h-20 shadow-lg bg-primary">
   <nav class="h-full p-4 lg:px-8 xl:container xl:px-16 flex justify-between items-center">
     <div class="flex items-center">
-      <button (click)="headerService.toggleMenu()" class="xl:hidden rounded-lg bg-secondary flex justify-center items-center h-10 w-10 mr-6">
-        @if (headerService.isMenuOpen()) {
-          <img class="w-7 h-7" src="close.svg"/>
-        } @else {
-          <img class="w-7 h-7" src="hamburger.svg"/>
-        }
+      <button (click)="headerService.toggleMenu();  $event.stopPropagation()" class="xl:hidden rounded-lg bg-secondary flex justify-center items-center h-10 w-10 mr-6">
+        <img
+          src="hamburger.svg"
+          class="icon absolute w-7 h-7 transition-all duration-200 ease-in-out"
+          [class.opacity-0]="headerService.isMenuOpen()"
+
+        />
+        <img
+          src="close.svg"
+          class="icon absolute w-7 h-7 transition-all duration-200 ease-in-out opacity-0"
+          [class.opacity-100]="headerService.isMenuOpen()"
+
+        />
       </button>
       <a [routerLink]="['/']" class="w-[120px] text-white text-3xl font-semibold">
         <img src="logo.svg"/>
@@ -70,7 +77,7 @@
       </a>
     }
     </div>
-    <div class="side-menu flex flex-col" [class]="headerService.isMenuOpen() ? 'is-open': ''">
+    <div class="side-menu flex flex-col" [class]="headerService.isMenuOpen() ? 'is-open': ''" #sideMenu>
       <form (ngSubmit)="onSearch()" class="flex items-center w-[300px] md:hidden">
         <input
           type="text"

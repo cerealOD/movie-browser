@@ -29,6 +29,7 @@ import { filter } from 'rxjs';
 export class HeaderComponent {
   private router = inject(Router);
   @ViewChild('dropdownWrapper') dropdownWrapper!: ElementRef;
+  @ViewChild('sideMenu') sideMenu!: ElementRef;
   auth = inject(AuthService);
   headerService = inject(HeaderService);
   searchQuery = '';
@@ -51,12 +52,18 @@ export class HeaderComponent {
   // close dropdown when clicking outside
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {
-    if (!this.dropdownWrapper) return;
+    // if (!this.sideMenu) return;
     if (
       this.headerService.dropdownOpen() &&
       !this.dropdownWrapper.nativeElement.contains(event.target)
     ) {
       this.headerService.close();
+    }
+    if (
+      this.headerService.isMenuOpen() &&
+      !this.sideMenu.nativeElement.contains(event.target)
+    ) {
+      this.headerService.toggleMenu();
     }
   }
 

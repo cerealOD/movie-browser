@@ -14,8 +14,9 @@
 
 .side-menu{
   @apply fixed z-30 top-20 bg-secondary bg-opacity-30 h-full left-[-100%] w-[300px];
-  transition: left .3s ease 0s;
+  transition: left .2s ease 0s;
 }
+
 .side-menu.is-open{
   @apply left-0;
 }
