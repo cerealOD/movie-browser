@@ -79,7 +79,9 @@ export class HeaderComponent {
 
   onSearch() {
     if (!this.searchQuery.trim()) return;
-    this.headerService.toggleMenu();
+    if (this.headerService.isMenuOpen()) {
+      this.headerService.toggleMenu();
+    }
 
     this.router.navigateByUrl(`/search?query=${this.searchQuery}&page=1`);
   }
