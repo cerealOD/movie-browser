@@ -8,6 +8,8 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
+import { HeaderService } from '../../services/header.service';
+import { Router, RouterLink } from '@angular/router';
 
 function equalValues(controlName1: string, controlName2: string) {
   return (control: AbstractControl) => {
@@ -25,13 +27,15 @@ function equalValues(controlName1: string, controlName2: string) {
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css',
 })
 export class SignupComponent {
   private auth = inject(AuthService);
   private toast = inject(ToastService);
+  private headerService = inject(HeaderService);
+  private router = inject(Router);
 
   form = new FormGroup({
     username: new FormControl('', {
@@ -60,7 +64,18 @@ export class SignupComponent {
 
     this.auth.register(username, password).subscribe({
       next: () => {
-        this.toast.show('Signup successful! You can now log in.', 'success');
+        this.auth.login(username, password).subscribe({
+          next: (res) => {
+            console.log('Logged in:', res);
+            this.headerService.close();
+            this.router.navigate(['/']);
+            this.toast.show('Signup and Login successful!', 'success');
+          },
+          error: (err) => {
+            this.toast.show(err.error?.error || 'Login failed', 'error');
+          },
+        });
+        // this.toast.show('Signup successful! You can now log in.', 'success');
       },
       error: (err) => {
         this.toast.show(err.error?.error || 'Signup failed', 'error');

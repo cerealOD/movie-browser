@@ -1,5 +1,8 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-container">
-  <h2>Create an account</h2>
+  <div class="text-center mb-8">
+    <h2>Create an account</h2>
+    <p class="text-sm text-opacity-90 text-primary">Save favorite movies by signing up!</p>
+  </div>
 
   <div class="flex flex-col gap-4">
     <div class="flex flex-col gap-2">
@@ -29,5 +32,7 @@
     </div>
   </div>
   <button class="form-submit" [disabled]="form.invalid">Sign Up</button>
-
+  <p class="text-sm text-primary text-opacity-90 mt-3 text-center">Already have an account?
+    <a routerLink="/auth/login"><span class="font-semibold">Log in!</span></a>
+  </p>
 </form>

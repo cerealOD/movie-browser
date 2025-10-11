@@ -1,8 +1,8 @@
 .form-container {
-  @apply shadow-lg rounded-2xl bg-secondary p-6 w-[360px];
+  @apply shadow-lg rounded-xl sm:rounded-2xl bg-secondary p-4 sm:p-6 w-[300px] sm:w-[360px];
 
   h2 {
-    @apply text-primary text-center text-2xl font-semibold mb-8;
+    @apply text-primary text-center text-lg sm:text-xl font-semibold;
   }
 
   .form-label{
@@ -10,11 +10,11 @@
   }
 
   .form-input{
-    @apply shadow-md p-2 rounded-lg h-10 bg-white bg-opacity-70;
+    @apply text-primary text-sm sm:text-base shadow-md p-2 rounded-lg h-10 bg-white bg-opacity-80;
   }
 
   .form-submit {
-    @apply w-full mt-8 shadow-lg px-4 py-3 bg-primary rounded-lg text-white font-semibold hover:bg-opacity-70 disabled:bg-opacity-50 disabled:text-opacity-50;
+    @apply w-full mt-8 shadow-lg px-4 py-3 bg-primary rounded-lg text-sm text-white font-semibold hover:bg-opacity-70 transition-basic disabled:bg-opacity-50 disabled:text-opacity-50;
   }
 }
 
