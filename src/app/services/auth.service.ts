@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { MoviesService } from './movies.service';
 
@@ -25,10 +25,16 @@ export class AuthService {
   }
 
   register(username: string, password: string): Observable<any> {
-    return this.http.post(`${this.API_URL}/auth/register`, {
-      username,
-      password,
-    });
+    return this.http
+      .post(`${this.API_URL}/auth/register`, {
+        username,
+        password,
+      })
+      .pipe(
+        catchError((error) => {
+          return throwError(() => error);
+        })
+      );
   }
 
   login(username: string, password: string): Observable<any> {
@@ -41,6 +47,9 @@ export class AuthService {
         }
       )
       .pipe(
+        catchError((error) => {
+          return throwError(() => error);
+        }),
         tap((res) => {
           this.user.set(res.user);
           localStorage.setItem('token', res.token);

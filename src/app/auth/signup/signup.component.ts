@@ -72,10 +72,9 @@ export class SignupComponent {
             this.toast.show('Signup and Login successful!', 'success');
           },
           error: (err) => {
-            this.toast.show(err.error?.error || 'Login failed', 'error');
+            this.toast.show(err.message || 'Signup failed', 'error');
           },
         });
-        // this.toast.show('Signup successful! You can now log in.', 'success');
       },
       error: (err) => {
         this.toast.show(err.error?.error || 'Signup failed', 'error');

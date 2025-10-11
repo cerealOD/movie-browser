@@ -22,7 +22,11 @@
 }
 
 .side-menu-link {
-  @apply text-white border-b border-solid border-white p-4 lg:px-8 font-semibold border-opacity-30 hover:bg-white hover:bg-opacity-10;
+  @apply text-white border-b border-solid border-white p-4 lg:px-8 font-semibold border-opacity-30 bg-white bg-opacity-0 hover:bg-opacity-10;
+}
+
+.side-menu-link-auth {
+  @apply sm:hidden border-b border-solid border-white p-4 lg:px-8 font-semibold border-opacity-30 text-primary bg-secondary hover:bg-opacity-60;
 }
 
 .side-menu-logout {

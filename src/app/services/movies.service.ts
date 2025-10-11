@@ -116,7 +116,6 @@ export class MoviesService {
   private fetchMovie(url: string) {
     return this.httpClient.get<Movie>(url).pipe(
       catchError((error) => {
-        console.log(error);
         return throwError(() => error);
       })
     );

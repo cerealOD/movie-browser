@@ -112,10 +112,10 @@
           Log Out
         </a>
       } @else {
-        <a (click)="headerService.toggleMenu()" [routerLink]="['/auth/login']" class="side-menu-link sm:hidden">
+        <a (click)="headerService.toggleMenu()" [routerLink]="['/auth/login']" class="side-menu-link-auth">
           Log In
         </a>
-        <a (click)="headerService.toggleMenu()" [routerLink]="['/auth/register']" class="side-menu-link sm:hidden">
+        <a (click)="headerService.toggleMenu()" [routerLink]="['/auth/register']" class="side-menu-link-auth">
           Sign Up
         </a>
       }
