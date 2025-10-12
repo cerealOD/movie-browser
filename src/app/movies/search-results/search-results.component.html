@@ -1,9 +1,6 @@
 <app-movies-container [title]="movies()?.length !== 0 ? 'Search Results:' : 'No Results'">
 
   @if (movies()?.length !== 0){
-    @if (error()) {
-      <p class="mt-4 fallback-text">{{ error() }}</p>
-    }
     <app-movies [movies]="movies()!"/>
 
     <div class="mt-6 flex justify-center">

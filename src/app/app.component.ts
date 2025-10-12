@@ -16,10 +16,11 @@ import { HeaderService } from './services/header.service';
   imports: [HeaderComponent, RouterOutlet, FooterComponent, ToastComponent],
 })
 export class AppComponent {
+  headerService = inject(HeaderService);
+
   private auth = inject(AuthService);
   private movies = inject(MoviesService);
   private renderer = inject(Renderer2);
-  headerService = inject(HeaderService);
 
   constructor() {
     effect(() => {

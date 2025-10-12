@@ -3,6 +3,7 @@ import { MoviesComponent } from '../movies/movies.component';
 import { MoviesContainerComponent } from '../movies/movies-container/movies-container.component';
 import { MoviesService } from '../services/movies.service';
 import { FetchDataService } from '../services/fetch-state.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-favorites',
@@ -11,24 +12,28 @@ import { FetchDataService } from '../services/fetch-state.service';
   styleUrl: './favorites.component.css',
 })
 export class FavoritesComponent {
-  private moviesService = inject(MoviesService);
-  private destroyRef = inject(DestroyRef);
   private fetchState = inject(FetchDataService);
   isFetching = this.fetchState.isFetching;
+
+  private moviesService = inject(MoviesService);
   movies = this.moviesService.loadedUserFavorites;
+
   currentPage = signal(1);
   totalRecords = signal(1);
-  error = signal('');
+
+  private destroyRef = inject(DestroyRef);
+  private toast = inject(ToastService);
 
   ngOnInit() {
     this.isFetching.set(true);
     //the backend provides an observable to which we need to sub
     const subscription = this.moviesService.loadUserFavorites().subscribe({
-      error: (error: Error) => {
-        // to get the original error message
-        this.error.set(error.message);
-        this.isFetching.set(false);
-        // this.error.set('Something went wrong fetching data');
+      error: (err: Error) => {
+        console.error('Favorite movies fetch failed:', err);
+        this.toast.show(
+          'Failed to load favorite movies. Please try again later.',
+          'error'
+        );
       },
       complete: () => {
         this.isFetching.set(false);

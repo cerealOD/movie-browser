@@ -1,11 +1,5 @@
 <app-movies-container title="Your Favorites">
-  @if (isFetching() && !error()) {
-    <!-- <p class="fallback-text">Fetching movies..</p> -->
-  }
 
-  @if (error()) {
-    <p class="mt-4 fallback-text">{{ error() }}</p>
-  }
   @if (movies().length > 0) {
     <app-movies [movies]="movies()!"/>
   } @else {

@@ -6,6 +6,7 @@ import { MoviesContainerComponent } from '../movies-container/movies-container.c
 import { MoviesComponent } from '../movies.component';
 import { PaginatorModule } from 'primeng/paginator';
 import { FetchDataService } from '../../services/fetch-state.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-search-results',
@@ -18,14 +19,14 @@ export class SearchResultsComponent implements OnInit {
   movies = signal<IndexMovie[] | undefined>(undefined);
   currentPage = signal(1);
   totalRecords = signal(1);
-  error = signal('');
+
+  private fetchState = inject(FetchDataService);
+  isFetching = this.fetchState.isFetching;
 
   private moviesService = inject(MoviesService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
-  private fetchState = inject(FetchDataService);
-
-  isFetching = this.fetchState.isFetching;
+  private toast = inject(ToastService);
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
@@ -46,7 +47,11 @@ export class SearchResultsComponent implements OnInit {
         this.totalRecords.set(res.total_results);
       },
       error: (err: Error) => {
-        this.error.set(err.message || 'Failed to load');
+        console.error('Search results fetch failed:', err);
+        this.toast.show(
+          'Failed to fetch search results. Please try again later.',
+          'error'
+        );
         this.isFetching.set(false);
       },
       complete: () => {

@@ -32,11 +32,6 @@ function equalValues(controlName1: string, controlName2: string) {
   styleUrl: './signup.component.css',
 })
 export class SignupComponent {
-  private auth = inject(AuthService);
-  private toast = inject(ToastService);
-  private headerService = inject(HeaderService);
-  private router = inject(Router);
-
   form = new FormGroup({
     username: new FormControl('', {
       validators: [Validators.required],
@@ -55,6 +50,11 @@ export class SignupComponent {
       }
     ),
   });
+
+  private auth = inject(AuthService);
+  private toast = inject(ToastService);
+  private headerService = inject(HeaderService);
+  private router = inject(Router);
 
   onSubmit() {
     if (this.form.invalid) return;

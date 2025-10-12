@@ -22,12 +22,14 @@ import { ToastService } from '../../services/toast.service';
 export class MovieComponent {
   movie = input.required<IndexMovie>();
   currentRoute = signal<string | undefined>('');
+
+  private fetchState = inject(FetchDataService);
+  isFetching = this.fetchState.isFetching;
+
   private moviesService = inject(MoviesService);
   private destroyRef = inject(DestroyRef);
   private router = inject(Router);
-  private fetchState = inject(FetchDataService);
   private toast = inject(ToastService);
-  isFetching = this.fetchState.isFetching;
 
   ngOnInit() {
     this.router.events.subscribe(() => {

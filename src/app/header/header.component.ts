@@ -26,12 +26,13 @@ import { filter } from 'rxjs';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
-  private router = inject(Router);
   @ViewChild('dropdownWrapper') dropdownWrapper!: ElementRef;
   @ViewChild('sideMenu') sideMenu!: ElementRef;
   auth = inject(AuthService);
   headerService = inject(HeaderService);
   searchQuery = '';
+
+  private router = inject(Router);
 
   initial = computed(
     () => this.auth.user()?.username.charAt(0).toUpperCase() ?? '?'
@@ -48,16 +49,17 @@ export class HeaderComponent {
       });
   }
 
-  // close dropdown when clicking outside
+  // close menus when clicking outside
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {
-    // if (!this.sideMenu) return;
+    // close dropdown
     if (
       this.headerService.dropdownOpen() &&
       !this.dropdownWrapper.nativeElement.contains(event.target)
     ) {
       this.headerService.close();
     }
+    //close sidemenu
     if (
       this.headerService.isMenuOpen() &&
       !this.sideMenu.nativeElement.contains(event.target)

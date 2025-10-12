@@ -18,11 +18,6 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-  private router = inject(Router);
-  private auth = inject(AuthService);
-  private headerService = inject(HeaderService);
-  private toast = inject(ToastService);
-
   form = new FormGroup({
     username: new FormControl('', {
       validators: [Validators.required],
@@ -31,6 +26,11 @@ export class LoginComponent {
       validators: [Validators.minLength(6), Validators.required],
     }),
   });
+
+  private router = inject(Router);
+  private auth = inject(AuthService);
+  private headerService = inject(HeaderService);
+  private toast = inject(ToastService);
 
   onSubmit() {
     const username = this.form.value.username!;

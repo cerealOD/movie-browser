@@ -18,24 +18,21 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrl: './movie-show.component.css',
 })
 export class MovieShowComponent {
+  movieId = signal<number>(0);
+  movie = signal<Movie | undefined>(undefined);
+  similars = signal<IndexMovie[] | undefined>([]);
+  cast = signal<Cast[] | undefined>([]);
+  isAdding = signal(false);
+
+  private fetchState = inject(FetchDataService);
+  isFetching = this.fetchState.isFetching;
+
   private moviesService = inject(MoviesService);
   private destroyRef = inject(DestroyRef);
   private route = inject(ActivatedRoute);
   private auth = inject(AuthService);
   private router = inject(Router);
-  private fetchState = inject(FetchDataService);
   private toast = inject(ToastService);
-
-  isFetching = this.fetchState.isFetching;
-  movieId = signal<number>(0);
-  isFetchingSimilars = signal(false);
-  isFetchingCredits = signal(false);
-  error = signal('');
-  movie = signal<Movie | undefined>(undefined);
-  similars = signal<IndexMovie[] | undefined>([]);
-  cast = signal<Cast[] | undefined>([]);
-  isAdding = signal(false);
-  addError = signal<string | null>(null);
 
   // pull favorites as readonly signal
   userFavorites = this.moviesService.loadedUserFavorites;
@@ -54,15 +51,20 @@ export class MovieShowComponent {
 
   private fetchMovie(movieId: number) {
     this.isFetching.set(true);
-    this.moviesService.loadMovie(movieId).subscribe({
+    this.moviesService.fetchMovie(movieId).subscribe({
       next: (res) => {
         this.movie.set(res);
       },
       error: (err: HttpErrorResponse) => {
+        console.error('Movie fetch error:', err);
+
         if (err.status === 404) {
           this.router.navigateByUrl('/not-found');
         } else {
-          this.error.set(err.message || 'Failed to load');
+          this.toast.show(
+            'Failed to load movie. Please try again later.',
+            'error'
+          );
         }
         this.isFetching.set(false);
       },
@@ -73,24 +75,22 @@ export class MovieShowComponent {
   }
 
   private fetchSimilars(movieId: number) {
-    this.isFetchingSimilars.set(true);
     this.moviesService.loadSimilarMovies(movieId).subscribe({
       next: (res) => {
         this.similars.set(res.results.slice(0, 12));
       },
       error: (err: Error) => {
-        this.error.set(err.message || 'Failed to load similar movies');
-        this.isFetchingSimilars.set(false);
-      },
-      complete: () => {
-        this.isFetchingSimilars.set(false);
+        console.error('Similar movies fetch failed:', err);
+        this.toast.show(
+          'Failed to load similar movies. Please try again later.',
+          'error'
+        );
       },
     });
   }
 
   private fetchCast(movieId: number) {
-    this.isFetchingCredits.set(true);
-    this.moviesService.loadCast(movieId).subscribe({
+    this.moviesService.fetchCast(movieId).subscribe({
       next: (res) => {
         this.cast.set(
           // only get cast with existing profile picture
@@ -98,11 +98,11 @@ export class MovieShowComponent {
         );
       },
       error: (err: Error) => {
-        this.error.set(err.message || 'Failed to load cast');
-        this.isFetchingCredits.set(false);
-      },
-      complete: () => {
-        this.isFetchingCredits.set(false);
+        console.error('Similar movies fetch failed:', err);
+        this.toast.show(
+          'Failed to load cast. Please try again later.',
+          'error'
+        );
       },
     });
   }

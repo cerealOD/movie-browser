@@ -3,9 +3,6 @@
   : 'No ' + (category() | titleize) + ' movies could be found'">
 
   @if (movies()?.length !== 0){
-    @if (error()) {
-      <p class="mt-4 fallback-text">{{ error() }}</p>
-    }
     @if (movies()) {
     <app-movies [movies]="movies()!"/>
 

@@ -15,6 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TitleizePipe } from '../../pipes/titleize.pipe';
 import { PaginatorModule } from 'primeng/paginator';
 import { FetchDataService } from '../../services/fetch-state.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-popular-movies',
@@ -33,7 +34,6 @@ export class CategoricalMoviesComponent implements OnInit {
   movies = signal<IndexMovie[] | undefined>(undefined);
   currentPage = signal(1);
   totalRecords = signal(1);
-  error = signal('');
 
   private moviesService = inject(MoviesService);
   private route = inject(ActivatedRoute);
@@ -41,6 +41,8 @@ export class CategoricalMoviesComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private lastLoadedCategory = '';
   private lastLoadedPage = 0;
+  private toast = inject(ToastService);
+
   private fetchState = inject(FetchDataService);
   isFetching = this.fetchState.isFetching;
 
@@ -97,7 +99,11 @@ export class CategoricalMoviesComponent implements OnInit {
         this.currentPage.set(page);
       },
       error: (err: Error) => {
-        this.error.set(err.message || 'Failed to load');
+        console.error('Category movies fetch failed:', err);
+        this.toast.show(
+          'Failed to load movies. Please try again later.',
+          'error'
+        );
         this.isFetching.set(false);
       },
       complete: () => {

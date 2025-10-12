@@ -25,10 +25,6 @@ export class MoviesService {
     };
   }
 
-  loadMovie(movieId: number) {
-    return this.fetchMovie(`${environment.apiUrl}/movie/${movieId}`);
-  }
-
   loadUserFavorites() {
     return this.httpClient
       .get<IndexMovie[]>(
@@ -37,8 +33,8 @@ export class MoviesService {
       )
       .pipe(
         tap((favorites) => this.userFavorites.set(favorites)),
-        catchError((err) => {
-          return throwError(() => new Error('Failed to load favorites'));
+        catchError((error) => {
+          return throwError(() => error);
         })
       );
   }
@@ -57,8 +53,8 @@ export class MoviesService {
       .post(`${environment.apiUrl}/favorites`, movie, this.getAuthHeaders())
       .pipe(
         tap(() => this.userFavorites.set([...prevFavs, movie])),
-        catchError((err) => {
-          return throwError(() => new Error('Failed to add favorite'));
+        catchError((error) => {
+          return throwError(() => error);
         })
       );
   }
@@ -74,49 +70,54 @@ export class MoviesService {
           const updated = this.userFavorites().filter((m) => m.id !== movieId);
           this.userFavorites.set(updated);
         }),
-        catchError((err) => {
-          return throwError(() => new Error('Failed to remove favorite'));
+        catchError((error) => {
+          return throwError(() => error);
         })
       );
   }
 
   loadCategoricalMovies(category: string, page: number = 1) {
     return this.fetchMovies(
-      `${environment.apiUrl}/movies/${category}?page=${page}`,
-      'Something went wrong fetching popular movies'
+      `${environment.apiUrl}/movies/${category}?page=${page}`
     );
   }
 
   loadSimilarMovies(movieId: number, page: number = 1) {
     return this.fetchMovies(
-      `${environment.apiUrl}/movie/${movieId}/similar?page=${page}`,
-      'Something went wrong fetching similar movies'
-    );
-  }
-
-  loadCast(movieId: number) {
-    return this.fetchCast(
-      `${environment.apiUrl}/movie/${movieId}/credits`,
-      'Something went wrong fetching cast'
+      `${environment.apiUrl}/movie/${movieId}/similar?page=${page}`
     );
   }
 
   searchMovies(query: string, page: number = 1) {
     return this.fetchMovies(
-      `${environment.apiUrl}/movies/search?query=${query}&page=${page}`,
-      'Something went wrong fetching search result'
+      `${environment.apiUrl}/movies/search?query=${query}&page=${page}`
     );
   }
 
-  private fetchMovie(url: string) {
-    return this.httpClient.get<Movie>(url).pipe(
-      catchError((error) => {
-        return throwError(() => error);
-      })
-    );
+  fetchCast(movieId: number) {
+    return this.httpClient
+      .get<{
+        id: string;
+        cast: Cast[];
+      }>(`${environment.apiUrl}/movie/${movieId}/credits`)
+      .pipe(
+        catchError((error) => {
+          return throwError(() => error);
+        })
+      );
   }
 
-  private fetchMovies(url: string, errorMessage: string) {
+  fetchMovie(movieId: number) {
+    return this.httpClient
+      .get<Movie>(`${environment.apiUrl}/movie/${movieId}`)
+      .pipe(
+        catchError((error) => {
+          return throwError(() => error);
+        })
+      );
+  }
+
+  private fetchMovies(url: string) {
     return this.httpClient
       .get<{
         page: number;
@@ -126,20 +127,7 @@ export class MoviesService {
       }>(url)
       .pipe(
         catchError((error) => {
-          return throwError(() => new Error(errorMessage));
-        })
-      );
-  }
-
-  private fetchCast(url: string, errorMessage: string) {
-    return this.httpClient
-      .get<{
-        id: string;
-        cast: Cast[];
-      }>(url)
-      .pipe(
-        catchError((error) => {
-          return throwError(() => new Error(errorMessage));
+          return throwError(() => error);
         })
       );
   }
