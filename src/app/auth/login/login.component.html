@@ -1,23 +1,24 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-container">
   <div class="text-center mb-8">
-    <h2>Welcome back</h2>
+    <h1>Welcome back</h1>
     <p class="text-sm text-opacity-90 text-primary">Log in to your account to browse movies!</p>
   </div>
 
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-4" role="group" aria-labelledby="login-fields">
     <div class="flex flex-col gap-2">
-      <label class="form-label" for="username">Username*</label>
-      <input class="form-input" id="username" type="username" [formControl]="form.controls.username" placeholder="Your username" />
+      <label class="form-label" for="username">Username<span aria-hidden="true">*</span></label>
+      <input class="form-input" id="username" type="text" formControlName="username" placeholder="Your username" autocomplete="username" required />
     </div>
 
     <div class="flex flex-col gap-2">
-      <label class="form-label" for="password">Password*</label>
-      <input class="form-input" id="password" type="password" formControlName="password" placeholder="Password"
-       />
+      <label class="form-label" for="password">Password<span aria-hidden="true">*</span></label>
+      <input class="form-input" id="password" type="password" formControlName="password" placeholder="Password"         autocomplete="current-password" required />
     </div>
   </div>
-  <button class="form-submit" [disabled]="form.invalid">Log In</button>
+  <button class="form-submit" type="submit" [disabled]="form.invalid">Log In</button>
   <p class="text-sm text-primary text-opacity-90 mt-3 text-center">New to Movie Browser?
-    <a routerLink="/auth/register"><span class="font-semibold">Sign up!</span></a>
+    <a routerLink="/auth/register" class="font-semibold hover:underline">
+      Sign up!
+    </a>
   </p>
 </form>

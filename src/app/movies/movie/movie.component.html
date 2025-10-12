@@ -1,44 +1,45 @@
-<div class="h-full flex flex-col justify-between">
+<article class="h-full flex flex-col justify-between">
   <a
-  [routerLink]="['/movie', movie().id]"
-  class="group block text-white rounded-2xl transition-all duration-300 ease-[cubic-bezier(0.165,0.84,0.44,1)] transform hover:scale-[1.03]"
+    [routerLink]="['/movie', movie().id]"
+    class="group block text-white rounded-2xl transition-all duration-300 ease-[cubic-bezier(0.165,0.84,0.44,1)] transform hover:scale-[1.03]"
+    aria-label="View details for {{ movie().title }}"
   >
-    <div
+    <figure
       class="relative pb-[145%] rounded-xl overflow-hidden shadow-[0_0_25px_rgba(0,0,0,0.4)] transition-all duration-300 ease-[cubic-bezier(0.165,0.84,0.44,1)] group-hover:shadow-[0_2px_35px_rgba(216,198,238,0.3)] group-hover:-translate-y-1"
     >
-      @if (isFetching()) {
-      } @else {
-        @if (movie().poster_path) {
-          <img
-            class="absolute w-full h-full object-cover rounded-xl transition-transform duration-500 ease-[cubic-bezier(0.165,0.84,0.44,1)] group-hover:scale-105 group-hover:brightness-110"
-            [src]="'https://image.tmdb.org/t/p/w500' + movie().poster_path"
-            loading="lazy"
-          />
-        } @else {
-          <img
-            class="absolute w-full h-full object-cover rounded-xl transition-transform duration-500 ease-[cubic-bezier(0.165,0.84,0.44,1)] group-hover:scale-105 group-hover:brightness-110"
-            src="placeholder.png"
-            loading="lazy"
-          />
-        }
+      @if (!isFetching()) {
+        <img
+          class="absolute w-full h-full object-cover rounded-xl transition-transform duration-500 ease-[cubic-bezier(0.165,0.84,0.44,1)] group-hover:scale-105 group-hover:brightness-110"
+          [src]="movie().poster_path ? 'https://image.tmdb.org/t/p/w500' + movie().poster_path : 'placeholder.png'"
+          [alt]="movie().poster_path ? movie().title + ' poster' : 'No poster available'"
+          loading="lazy"
+        />
       }
       <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-    </div>
+    </figure>
 
     <p class="text-xs font-bold mt-3 text-gray-300 group-hover:text-secondary transition-colors duration-300">
-      {{ movie().release_date | date:'mediumDate' }}
+      <time [attr.datetime]="movie().release_date">{{ movie().release_date | date:'mediumDate' }}</time>
     </p>
-    <h2 class="mt-1 font-medium font-montserrat sm:text-lg group-hover:text-white transition-colors duration-300">
-      {{ movie().title }}
-    </h2>
 
+    <h3 class="mt-1 font-medium font-montserrat sm:text-lg group-hover:text-white transition-colors duration-300">
+      {{ movie().title }}
+    </h3>
   </a>
-  @if (currentRoute() === 'favorites'){
-    <button class="mt-4 favorite-btn w-full" (click)="toggleFavorite()">
+
+  @if (currentRoute() === 'favorites') {
+    <button
+      type="button"
+      class="mt-4 favorite-btn w-full"
+      (click)="toggleFavorite()"
+      [attr.aria-pressed]="isFavorite()"
+      [attr.aria-label]="isFavorite() ? 'Remove from favorites' : 'Add to favorites'"
+    >
       <i
-      class="font-semibold pi text-primary"
-      [class.pi-heart]="!isFavorite()"
-      [class.pi-heart-fill]="isFavorite()"
+        class="font-semibold pi text-primary"
+        [class.pi-heart]="!isFavorite()"
+        [class.pi-heart-fill]="isFavorite()"
+        aria-hidden="true"
       ></i>
       <span class="xl:hidden">
         {{ isFavorite() ? 'Added' : 'Add' }}
@@ -48,4 +49,4 @@
       </span>
     </button>
   }
-</div>
+</article>

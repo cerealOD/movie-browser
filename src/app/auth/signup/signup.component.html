@@ -1,38 +1,90 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-container">
   <div class="text-center mb-8">
-    <h2>Create an account</h2>
-    <p class="text-sm text-opacity-90 text-primary">Save favorite movies by signing up!</p>
+    <h1 class="text-2xl font-semibold">Create an account</h1>
+    <p class="text-sm text-primary text-opacity-90">
+      Save favorite movies by signing up!
+    </p>
   </div>
 
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-4" role="group" aria-labelledby="signup-fields">
     <div class="flex flex-col gap-2">
-      <label class="form-label" for="username">Username*</label>
-      <input class="form-input" id="username" type="username" [formControl]="form.controls.username" placeholder="Choose a username" />
+      <label class="form-label" for="username">
+        Username<span aria-hidden="true">*</span>
+      </label>
+      <input
+        class="form-input"
+        id="username"
+        type="text"
+        formControlName="username"
+        placeholder="Choose a username"
+        autocomplete="username"
+        required
+      />
     </div>
 
-    <div class="flex flex-col gap-4" formGroupName="passwords">
+    <fieldset
+      formGroupName="passwords"
+      class="flex flex-col gap-4"
+      aria-labelledby="password-group-label"
+    >
+      <legend id="password-group-label" class="sr-only">Password fields</legend>
+
       <div class="flex flex-col gap-2">
-        <label class="form-label" for="password">Password*</label>
-        <input class="form-input" id="password" type="password" name="password" formControlName="password" placeholder="Password"
+        <label class="form-label" for="password">
+          Password<span aria-hidden="true">*</span>
+        </label>
+        <input
+          class="form-input"
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Password"
+          autocomplete="new-password"
+          required
         />
-        <p class="italic text-sm text-medium text-opacity-70 text-primary">Must be at least 6 characters</p>
-        @if(form.get('passwords.password')?.touched && form.get('passwords.password')?.hasError('minlength')) {
-          <p class="control-error">Password must be at least 6 characters long</p>
+        <p
+          class="italic text-sm text-primary text-opacity-70"
+          id="password-help"
+        >
+          Must be at least 6 characters long.
+        </p>
+        @if (form.get('passwords.password')?.touched && form.get('passwords.password')?.hasError('minlength')) {
+          <p class="control-error" role="alert">
+            Password must be at least 6 characters long
+          </p>
         }
       </div>
 
       <div class="flex flex-col gap-2">
-        <label class="form-label" for="confirm-password">Confirm Password*</label>
-        <input class="form-input" id="confirm-password" type="password"  name="confirm-password" formControlName="confirmPassword" placeholder="Password again"
+        <label class="form-label" for="confirm-password">
+          Confirm Password<span aria-hidden="true">*</span>
+        </label>
+        <input
+          class="form-input"
+          id="confirm-password"
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="Password again"
+          required
         />
-        @if(form.get('passwords')?.touched && form.get('passwords')?.hasError('valuesNotEq')) {
-          <p class="control-error">Passwords do not match</p>
+        @if (form.get('passwords')?.touched && form.get('passwords')?.hasError('valuesNotEq')) {
+          <p class="control-error" role="alert">Passwords do not match</p>
         }
       </div>
-    </div>
+    </fieldset>
   </div>
-  <button class="form-submit" [disabled]="form.invalid">Sign Up</button>
-  <p class="text-sm text-primary text-opacity-90 mt-3 text-center">Already have an account?
-    <a routerLink="/auth/login"><span class="font-semibold">Log in!</span></a>
+
+  <button class="form-submit" type="submit" [disabled]="form.invalid">
+    Sign Up
+  </button>
+
+  <p class="text-sm text-primary text-opacity-90 mt-3 text-center">
+    Already have an account?
+    <a
+      routerLink="/auth/login"
+      class="font-semibold hover:underline"
+    >
+      Log in!
+    </a>
   </p>
 </form>

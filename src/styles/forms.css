@@ -1,7 +1,7 @@
 .form-container {
   @apply shadow-lg rounded-xl sm:rounded-2xl bg-secondary p-4 sm:p-6 w-[300px] sm:w-[360px];
 
-  h2 {
+  h1 {
     @apply text-primary text-center text-lg sm:text-xl font-semibold;
   }
 
@@ -19,5 +19,5 @@
 }
 
 .control-error {
-  @apply text-[#a80404] text-sm font-medium;
+  @apply text-[#a80404] text-sm  italic;
 }
