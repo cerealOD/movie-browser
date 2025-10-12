@@ -4,7 +4,6 @@ import { IndexMovie } from '../models/indexMovie.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { catchError, map, tap, throwError } from 'rxjs';
-import { ErrorService } from '../shared/error.service';
 import { Movie } from '../models/movie.model';
 import { Cast } from '../models/cast.model';
 import { AuthService } from './auth.service';
@@ -13,7 +12,6 @@ import { AuthService } from './auth.service';
   providedIn: 'root',
 })
 export class MoviesService {
-  private errorService = inject(ErrorService);
   private httpClient = inject(HttpClient);
   private userFavorites = signal<IndexMovie[]>([]);
   loadedUserFavorites = this.userFavorites.asReadonly();
@@ -40,7 +38,6 @@ export class MoviesService {
       .pipe(
         tap((favorites) => this.userFavorites.set(favorites)),
         catchError((err) => {
-          console.error('Failed to load favorites:', err);
           return throwError(() => new Error('Failed to load favorites'));
         })
       );
@@ -61,7 +58,6 @@ export class MoviesService {
       .pipe(
         tap(() => this.userFavorites.set([...prevFavs, movie])),
         catchError((err) => {
-          console.error('Failed to add favorite:', err);
           return throwError(() => new Error('Failed to add favorite'));
         })
       );
@@ -79,7 +75,6 @@ export class MoviesService {
           this.userFavorites.set(updated);
         }),
         catchError((err) => {
-          console.error('Failed to remove favorite:', err);
           return throwError(() => new Error('Failed to remove favorite'));
         })
       );
@@ -131,7 +126,6 @@ export class MoviesService {
       }>(url)
       .pipe(
         catchError((error) => {
-          console.log(error);
           return throwError(() => new Error(errorMessage));
         })
       );
@@ -145,7 +139,6 @@ export class MoviesService {
       }>(url)
       .pipe(
         catchError((error) => {
-          console.log(error);
           return throwError(() => new Error(errorMessage));
         })
       );

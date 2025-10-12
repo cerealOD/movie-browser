@@ -89,7 +89,6 @@ export class CategoricalMoviesComponent implements OnInit {
   }
 
   private loadMoviesForPage(page: number) {
-    console.log(this.category());
     this.isFetching.set(true);
     this.moviesService.loadCategoricalMovies(this.category(), page).subscribe({
       next: (response: any) => {

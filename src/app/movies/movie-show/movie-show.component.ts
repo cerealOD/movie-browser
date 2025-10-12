@@ -41,7 +41,6 @@ export class MovieShowComponent {
   userFavorites = this.moviesService.loadedUserFavorites;
 
   ngOnInit() {
-    console.log(this.isFavorite());
     const movieIdSub = this.route.paramMap.subscribe((params) => {
       this.movieId.set(parseInt(params.get('id') || ''));
       this.fetchMovie(this.movieId());

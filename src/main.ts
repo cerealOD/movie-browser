@@ -30,7 +30,6 @@ function loggingInterceptor(
     tap({
       next: (event) => {
         if (event.type === HttpEventType.Response) {
-          // console.log('incoming response' + event.status + event.body);
         }
       },
     })

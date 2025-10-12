@@ -66,7 +66,6 @@ export class SignupComponent {
       next: () => {
         this.auth.login(username, password).subscribe({
           next: (res) => {
-            console.log('Logged in:', res);
             this.headerService.close();
             this.router.navigate(['/']);
             this.toast.show('Signup and Login successful!', 'success');

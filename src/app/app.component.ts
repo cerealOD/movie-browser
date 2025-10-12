@@ -1,7 +1,5 @@
 import { Component, effect, inject, Renderer2 } from '@angular/core';
 
-import { ErrorService } from './shared/error.service';
-import { ErrorModalComponent } from './shared/modal/error-modal/error-modal.component';
 import { HeaderComponent } from './header/header.component';
 import { RouterOutlet } from '@angular/router';
 import { FooterComponent } from './footer/footer.component';
@@ -15,20 +13,12 @@ import { HeaderService } from './services/header.service';
   standalone: true,
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
-  imports: [
-    ErrorModalComponent,
-    HeaderComponent,
-    RouterOutlet,
-    FooterComponent,
-    ToastComponent,
-  ],
+  imports: [HeaderComponent, RouterOutlet, FooterComponent, ToastComponent],
 })
 export class AppComponent {
-  private errorService = inject(ErrorService);
   private auth = inject(AuthService);
   private movies = inject(MoviesService);
   private renderer = inject(Renderer2);
-  error = this.errorService.error;
   headerService = inject(HeaderService);
 
   constructor() {

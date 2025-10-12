@@ -50,14 +50,16 @@ export class MovieComponent {
         .removeMovieFromUserFavorites(movie.id)
         .subscribe({
           next: () => this.toast.show('Removed from favorites!', 'success'),
-          error: (err: Error) => console.error(err.message),
+          error: (err: Error) =>
+            this.toast.show(err.message || 'Failed to remove', 'error'),
         });
       this.destroyRef.onDestroy(() => sub.unsubscribe());
     } else {
       // Add
       const sub = this.moviesService.addMovieToUserFavorites(movie).subscribe({
         next: () => this.toast.show('Added to favorites!', 'success'),
-        error: (err: Error) => console.error(err.message),
+        error: (err: Error) =>
+          this.toast.show(err.message || 'Failed to add', 'error'),
       });
       this.destroyRef.onDestroy(() => sub.unsubscribe());
     }
