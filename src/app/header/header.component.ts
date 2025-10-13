@@ -34,12 +34,13 @@ export class HeaderComponent {
 
   private router = inject(Router);
 
+  // compute initial based on username
   initial = computed(
     () => this.auth.user()?.username.charAt(0).toUpperCase() ?? '?'
   );
 
   ngOnInit() {
-    // Clear search when leaving search page
+    // clear search when leaving search page
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {

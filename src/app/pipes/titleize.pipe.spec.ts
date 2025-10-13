@@ -11,7 +11,7 @@ describe('TitleizePipe', () => {
     expect(pipe).toBeTruthy();
   });
 
-  //only this test is relevant in the app
+  // only this test is relevant in the app
   it('should capitalize each word separated by hyphens', () => {
     const result = pipe.transform('the-dark-knight');
     expect(result).toBe('The Dark Knight');

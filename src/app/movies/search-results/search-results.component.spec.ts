@@ -5,6 +5,7 @@ import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { SearchResultsComponent } from './search-results.component';
 import { IndexMovie } from '../../models/indexMovie.model';
 import { BehaviorSubject, of, throwError } from 'rxjs';
+import { ToastService } from '../../services/toast.service';
 
 const queryParamsSubject = new BehaviorSubject({ query: 'matrix', page: 2 });
 
@@ -28,12 +29,14 @@ describe('SearchResultsComponent', () => {
   let component: SearchResultsComponent;
   let fixture: ComponentFixture<SearchResultsComponent>;
   let moviesServiceSpy: jasmine.SpyObj<MoviesService>;
+  let toastServiceSpy: jasmine.SpyObj<ToastService>;
 
   beforeEach(async () => {
     moviesServiceSpy = jasmine.createSpyObj('MoviesService', ['searchMovies']);
     moviesServiceSpy.searchMovies.and.returnValue(
       of({ page: 1, results: fakeResults, total_pages: 3, total_results: 50 })
     );
+    toastServiceSpy = jasmine.createSpyObj('ToastService', ['show']);
 
     await TestBed.configureTestingModule({
       imports: [SearchResultsComponent],
@@ -41,6 +44,7 @@ describe('SearchResultsComponent', () => {
         provideRouter([]),
         { provide: MoviesService, useValue: moviesServiceSpy },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
+        { provide: ToastService, useValue: toastServiceSpy },
       ],
     }).compileComponents();
     const router = TestBed.inject(Router);
@@ -63,7 +67,7 @@ describe('SearchResultsComponent', () => {
     expect(component.isFetching()).toBeFalse();
   });
 
-  it('should set error signal if search fails', () => {
+  it('should show error toast if search fails', () => {
     // return observable that errors
     moviesServiceSpy.searchMovies.and.returnValue(
       throwError(() => new Error('Search failed'))
@@ -74,7 +78,10 @@ describe('SearchResultsComponent', () => {
 
     errorFixture.detectChanges();
 
-    expect(errorComponent.error()).toBe('Search failed');
+    expect(toastServiceSpy.show).toHaveBeenCalledWith(
+      'Failed to fetch search results. Please try again later.',
+      'error'
+    );
     expect(errorComponent.isFetching()).toBeFalse();
   });
 

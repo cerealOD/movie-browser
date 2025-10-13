@@ -8,13 +8,15 @@ import { ActivatedRoute } from '@angular/router';
 import { Movie } from '../../models/movie.model';
 import { IndexMovie } from '../../models/indexMovie.model';
 import { computed } from '@angular/core';
+import { ToastService } from '../../services/toast.service';
 
 describe('MovieShowComponent', () => {
   let component: MovieShowComponent;
   let fixture: ComponentFixture<MovieShowComponent>;
   let moviesServiceSpy: jasmine.SpyObj<MoviesService>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
-  let activatedRouteStub: Partial<ActivatedRoute>;
+  // let activatedRouteStub: Partial<ActivatedRoute>;
+  let toastSpy: jasmine.SpyObj<ToastService>;
 
   const fakeMovie = {
     adult: false,
@@ -32,12 +34,14 @@ describe('MovieShowComponent', () => {
   } as Movie;
 
   beforeEach(async () => {
+    toastSpy = jasmine.createSpyObj('ToastService', ['show']);
+
     moviesServiceSpy = jasmine.createSpyObj(
       'MoviesService',
       [
-        'loadMovie',
+        'fetchMovie',
         'loadSimilarMovies',
-        'loadCast',
+        'fetchCast',
         'removeMovieFromUserFavorites',
         'addMovieToUserFavorites',
         'isFavorite',
@@ -49,12 +53,11 @@ describe('MovieShowComponent', () => {
 
     authServiceSpy = jasmine.createSpyObj('AuthService', ['isLoggedIn']);
 
-    // Return Observables for all service calls
-    moviesServiceSpy.loadMovie.and.returnValue(of(fakeMovie));
+    moviesServiceSpy.fetchMovie.and.returnValue(of(fakeMovie));
     moviesServiceSpy.loadSimilarMovies.and.returnValue(
       of({ results: [] } as any)
     );
-    moviesServiceSpy.loadCast.and.returnValue(of({ cast: [] } as any));
+    moviesServiceSpy.fetchCast.and.returnValue(of({ cast: [] } as any));
     moviesServiceSpy.addMovieToUserFavorites.and.returnValue(of({}));
     moviesServiceSpy.removeMovieFromUserFavorites.and.returnValue(of({}));
     moviesServiceSpy.isFavorite.and.returnValue(false);
@@ -62,7 +65,7 @@ describe('MovieShowComponent', () => {
     authServiceSpy.isLoggedIn.and.returnValue(true);
 
     const activatedRouteStub = {
-      paramMap: of(convertToParamMap({ id: '1' })), // properly creates a ParamMap
+      paramMap: of(convertToParamMap({ id: '1' })),
     };
 
     await TestBed.configureTestingModule({
@@ -72,6 +75,7 @@ describe('MovieShowComponent', () => {
         { provide: MoviesService, useValue: moviesServiceSpy },
         { provide: AuthService, useValue: authServiceSpy },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
+        { provide: ToastService, useValue: toastSpy },
       ],
     }).compileComponents();
 
@@ -86,12 +90,10 @@ describe('MovieShowComponent', () => {
 
   it('should fetch movie, similars, and cast on ngOnInit', () => {
     component.ngOnInit();
-    expect(moviesServiceSpy.loadMovie).toHaveBeenCalledWith(1);
+    expect(moviesServiceSpy.fetchMovie).toHaveBeenCalledWith(1);
     expect(moviesServiceSpy.loadSimilarMovies).toHaveBeenCalledWith(1);
-    expect(moviesServiceSpy.loadCast).toHaveBeenCalledWith(1);
+    expect(moviesServiceSpy.fetchCast).toHaveBeenCalledWith(1);
     expect(component.isFetching()).toBeFalse();
-    expect(component.isFetchingSimilars()).toBeFalse();
-    expect(component.isFetchingCredits()).toBeFalse();
     expect(component.movie()).toEqual(fakeMovie);
   });
 
@@ -138,12 +140,15 @@ describe('MovieShowComponent', () => {
     );
   });
 
-  it('should set error signal if loadMovie fails', () => {
-    moviesServiceSpy.loadMovie.and.returnValue(
+  it('should show error toast if fetchMovie fails', () => {
+    moviesServiceSpy.fetchMovie.and.returnValue(
       throwError(() => new Error('Failed'))
     );
     component.ngOnInit();
 
-    expect(component.error()).toBe('Failed');
+    expect(toastSpy.show).toHaveBeenCalledWith(
+      'Failed to load movie. Please try again later.',
+      'error'
+    );
   });
 });

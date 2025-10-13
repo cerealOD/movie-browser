@@ -59,7 +59,7 @@ describe('MovieComponent (Host)', () => {
   });
 
   it('should render movie title and release date', () => {
-    const titleEl = movieDebugEl.nativeElement.querySelector('h2');
+    const titleEl = movieDebugEl.nativeElement.querySelector('h3');
     const dateEl = movieDebugEl.nativeElement.querySelector('p');
 
     expect(titleEl.textContent).toContain(hostComponent.testMovie.title);

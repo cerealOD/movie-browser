@@ -61,7 +61,7 @@ export class SearchResultsComponent implements OnInit {
   }
 
   loadPageFromPaginator(event: any) {
-    const page = event.page + 1; // PrimeNG is zero-based
+    const page = event.page + 1;
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { page },

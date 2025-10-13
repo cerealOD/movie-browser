@@ -38,6 +38,7 @@ export class MovieComponent {
     });
   }
 
+  // get whether a movie is favorites for logged in user
   isFavorite = computed(() =>
     this.moviesService.isFavorite(this.movie()?.id ?? -1)
   );
@@ -47,7 +48,6 @@ export class MovieComponent {
     if (!movie) return;
 
     if (this.isFavorite()) {
-      // Remove
       const sub = this.moviesService
         .removeMovieFromUserFavorites(movie.id)
         .subscribe({
@@ -57,7 +57,6 @@ export class MovieComponent {
         });
       this.destroyRef.onDestroy(() => sub.unsubscribe());
     } else {
-      // Add
       const sub = this.moviesService.addMovieToUserFavorites(movie).subscribe({
         next: () => this.toast.show('Added to favorites!', 'success'),
         error: (err: Error) =>

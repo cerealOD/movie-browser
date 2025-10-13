@@ -26,7 +26,6 @@ export class FavoritesComponent {
 
   ngOnInit() {
     this.isFetching.set(true);
-    //the backend provides an observable to which we need to sub
     const subscription = this.moviesService.loadUserFavorites().subscribe({
       error: (err: Error) => {
         console.error('Favorite movies fetch failed:', err);
@@ -34,6 +33,7 @@ export class FavoritesComponent {
           'Failed to load favorite movies. Please try again later.',
           'error'
         );
+        this.isFetching.set(false);
       },
       complete: () => {
         this.isFetching.set(false);

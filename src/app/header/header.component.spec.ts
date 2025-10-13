@@ -38,10 +38,8 @@ describe('HeaderComponent', () => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
 
-    component = fixture.componentInstance;
     router = TestBed.inject(Router);
 
-    // spy on the real Router methods AFTER injection
     spyOn(router, 'navigate');
     spyOn(router, 'navigateByUrl');
     fixture.detectChanges();

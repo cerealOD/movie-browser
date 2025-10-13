@@ -64,7 +64,7 @@ export class CategoricalMoviesComponent implements OnInit {
       }
     });
 
-    // Watch page query param separately
+    // Watch page query param
     const pageSub = this.route.queryParamMap.subscribe((qparams) => {
       const page = Number(qparams.get('page')) || 1;
 
@@ -112,6 +112,7 @@ export class CategoricalMoviesComponent implements OnInit {
     });
   }
 
+  // needed because of tmdb api, it returns max 500 pages
   cappedTotalRecords = computed(() => {
     const itemsPerPage = 20;
     const maxPages = 500;
@@ -125,6 +126,5 @@ export class CategoricalMoviesComponent implements OnInit {
       queryParams: { page },
       queryParamsHandling: 'merge',
     });
-    // The subscription on queryParamMap will call loadMoviesForPage
   }
 }

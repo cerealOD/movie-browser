@@ -2,35 +2,44 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { LoginComponent } from './login.component';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
 import { HeaderService } from '../../services/header.service';
+import { ToastService } from '../../services/toast.service';
 import { of, throwError } from 'rxjs';
+import { provideRouter, Router } from '@angular/router';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
-  let routerSpy: jasmine.SpyObj<Router>;
   let headerServiceSpy: jasmine.SpyObj<HeaderService>;
+  let toastServiceSpy: jasmine.SpyObj<ToastService>;
+  let router: Router;
 
   beforeEach(async () => {
     // mock injected services
     authServiceSpy = jasmine.createSpyObj('AuthService', ['login']);
-    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     headerServiceSpy = jasmine.createSpyObj('HeaderService', ['close']);
+    toastServiceSpy = jasmine.createSpyObj('ToastService', ['show']);
 
     await TestBed.configureTestingModule({
       imports: [LoginComponent],
       providers: [
+        provideRouter([]),
         provideHttpClientTesting(),
         { provide: AuthService, useValue: authServiceSpy },
-        { provide: Router, useValue: routerSpy },
         { provide: HeaderService, useValue: headerServiceSpy },
+        { provide: ToastService, useValue: toastServiceSpy },
       ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
+
+    router = TestBed.inject(Router);
+
+    spyOn(router, 'navigate');
+    spyOn(router, 'navigateByUrl');
+
     fixture.detectChanges();
   });
 
@@ -38,7 +47,7 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call AuthService.login() and navigate on success', () => {
+  it('should call AuthService.login(), close header, navigate, and show success toast', () => {
     component.form.setValue({ username: 'test', password: '123456' });
     authServiceSpy.login.and.returnValue(of({ token: 'fake-jwt' }));
 
@@ -46,19 +55,42 @@ describe('LoginComponent', () => {
 
     expect(authServiceSpy.login).toHaveBeenCalledWith('test', '123456');
     expect(headerServiceSpy.close).toHaveBeenCalled();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/']);
+    expect(router.navigate).toHaveBeenCalledWith(['/']);
+    expect(toastServiceSpy.show).toHaveBeenCalledWith(
+      'Login successful!',
+      'success'
+    );
   });
 
-  it('should handle login error', () => {
+  it('should show error toast and not navigate on login failure', () => {
     component.form.setValue({ username: 'fail', password: '123456' });
     authServiceSpy.login.and.returnValue(
-      throwError(() => new Error('Login failed'))
+      throwError(() => ({ error: { error: 'Invalid credentials' } }))
     );
 
     component.onSubmit();
 
     expect(authServiceSpy.login).toHaveBeenCalled();
-    // expect no navigation on error
-    expect(routerSpy.navigate).not.toHaveBeenCalled();
+    expect(router.navigate).not.toHaveBeenCalled();
+    expect(toastServiceSpy.show).toHaveBeenCalledWith(
+      'Invalid credentials',
+      'error'
+    );
+  });
+
+  it('should show generic error toast if no error message is provided', () => {
+    component.form.setValue({ username: 'fail', password: '123456' });
+    authServiceSpy.login.and.returnValue(
+      throwError(() => new Error('Something went wrong'))
+    );
+
+    component.onSubmit();
+
+    expect(authServiceSpy.login).toHaveBeenCalled();
+    expect(router.navigate).not.toHaveBeenCalled();
+    expect(toastServiceSpy.show).toHaveBeenCalledWith(
+      'Something went wrong',
+      'error'
+    );
   });
 });

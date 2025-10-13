@@ -46,7 +46,7 @@ export class SignupComponent {
         }),
       },
       {
-        validators: [equalValues('password', 'confirmPassword')], //these validators run for all inputs in a form group
+        validators: [equalValues('password', 'confirmPassword')],
       }
     ),
   });
@@ -65,18 +65,25 @@ export class SignupComponent {
     this.auth.register(username, password).subscribe({
       next: () => {
         this.auth.login(username, password).subscribe({
-          next: (res) => {
+          next: () => {
+            // instantly login user
             this.headerService.close();
             this.router.navigate(['/']);
             this.toast.show('Signup and Login successful!', 'success');
           },
           error: (err) => {
-            this.toast.show(err.message || 'Signup failed', 'error');
+            const message =
+              (err?.error && err.error.error) ||
+              err?.message ||
+              'Signup failed';
+            this.toast.show(message, 'error');
           },
         });
       },
       error: (err) => {
-        this.toast.show(err.error?.error || 'Signup failed', 'error');
+        const message =
+          (err?.error && err.error.error) || err?.message || 'Signup failed';
+        this.toast.show(message, 'error');
       },
     });
   }

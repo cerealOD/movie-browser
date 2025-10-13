@@ -43,7 +43,9 @@ export class LoginComponent {
         this.toast.show('Login successful!', 'success');
       },
       error: (err) => {
-        this.toast.show(err.error.error || 'Login failed', 'error');
+        const message =
+          (err?.error && err.error.error) || err?.message || 'Login failed';
+        this.toast.show(message, 'error');
       },
     });
   }

@@ -129,7 +129,6 @@ export class MovieShowComponent {
       } satisfies IndexMovie;
 
       if (this.isFavorite()) {
-        // Remove
         const sub = this.moviesService
           .removeMovieFromUserFavorites(movie.id)
           .subscribe({
@@ -139,7 +138,6 @@ export class MovieShowComponent {
           });
         this.destroyRef.onDestroy(() => sub.unsubscribe());
       } else {
-        // Add
         const sub = this.moviesService
           .addMovieToUserFavorites(indexMovie)
           .subscribe({

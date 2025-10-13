@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FavoritesComponent } from '../favorites/favorites.component';
 import { MoviesService } from '../services/movies.service';
+import { FetchDataService } from '../services/fetch-state.service';
+import { ToastService } from '../services/toast.service';
 import { signal } from '@angular/core';
 import { of, throwError } from 'rxjs';
 import { provideRouter } from '@angular/router';
@@ -9,6 +11,8 @@ describe('FavoritesComponent', () => {
   let component: FavoritesComponent;
   let fixture: ComponentFixture<FavoritesComponent>;
   let moviesServiceSpy: jasmine.SpyObj<MoviesService>;
+  let toastServiceSpy: jasmine.SpyObj<ToastService>;
+  let fetchDataService: FetchDataService;
 
   const fakeMovies = [
     {
@@ -36,49 +40,63 @@ describe('FavoritesComponent', () => {
       'MoviesService',
       ['loadUserFavorites'],
       {
-        // mock loadedUserFavorites so it acts like real signal
         loadedUserFavorites: signal(fakeMovies),
       }
     );
 
-    moviesServiceSpy.loadUserFavorites.and.returnValue(of(fakeMovies));
+    toastServiceSpy = jasmine.createSpyObj('ToastService', ['show']);
 
     await TestBed.configureTestingModule({
       imports: [FavoritesComponent],
       providers: [
         provideRouter([]),
         { provide: MoviesService, useValue: moviesServiceSpy },
+        { provide: ToastService, useValue: toastServiceSpy },
+        FetchDataService,
       ],
     }).compileComponents();
 
+    fetchDataService = TestBed.inject(FetchDataService);
+  });
+
+  function createComponent() {
     fixture = TestBed.createComponent(FavoritesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
+  }
 
   it('should create', () => {
+    moviesServiceSpy.loadUserFavorites.and.returnValue(of(fakeMovies));
+    createComponent();
     expect(component).toBeTruthy();
   });
 
   it('should call loadUserFavorites and update isFetching', () => {
+    moviesServiceSpy.loadUserFavorites.and.returnValue(of(fakeMovies));
+    createComponent();
+
     expect(moviesServiceSpy.loadUserFavorites).toHaveBeenCalled();
-    expect(component.isFetching()).toBeFalse(); // observable completes immediately
+    expect(component.isFetching()).toBeFalse();
   });
 
-  it('should set error signal if service throws an error', () => {
+  it('should show a toast and stop fetching if service throws an error', () => {
     moviesServiceSpy.loadUserFavorites.and.returnValue(
       throwError(() => new Error('Test error'))
     );
+    createComponent();
 
-    fixture = TestBed.createComponent(FavoritesComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    expect(toastServiceSpy.show).toHaveBeenCalledWith(
+      'Failed to load favorite movies. Please try again later.',
+      'error'
+    );
 
-    expect(component.error()).toBe('Test error');
     expect(component.isFetching()).toBeFalse();
   });
 
   it('should have movies from loadedUserFavorites', () => {
+    moviesServiceSpy.loadUserFavorites.and.returnValue(of(fakeMovies));
+    createComponent();
+
     expect(component.movies()).toEqual(fakeMovies);
   });
 });
