@@ -28,6 +28,10 @@ Users can sign up and log in via forms, and they get assigned a JWT with 1 hour 
 
 When designing the app, Figma was used to try out color combinations, fonts and layouts. The main logo was also "put together" by me in Figma, though it is very minimalistic. The app is also fully responsive, and is smoothly usable on any screensize. The styles in the app are a combination of using Tailwind for non-reused styles and plain css for reused styles.
 
+## Unit & Integration tests
+
+The app has unit and integration tests for each component written with Karma and Jasmine. Components are tested for correct behavior, correct sequence of actions and sometimes HTML content displayed. For some components, testing only their HTML content was enough as their usecase was nothing more than that, however, components with more complex logic are tested for functionality. I do not believe my tests are exhaustive, they probably could cover more, but I tried to test for at least some important behaviors. My original plan was to use Jest for testing, but it was shockingly impossible to setup jest in this Angular 20 project, even after multiple days of research and resource browsing, so I could not afford more time on that attempt. 
+
 ## Possible Improvements and Additions
 
 This app was created in exactly 2 weeks, so there is a LOT that could be added to this app in terms of features. Right now this is a demo app through which I practiced angular, therefore mainly focusing on trying out services, observables, inputs etc. Firstly, there is no real connection to a db, the users and favorites are stored in JSON files in the backend. My first improvement would be to have a Postgres db hosted, and connect the app to that instance. Many extra features could be added, for example creating personal watchlists (apart from the precoded favorites), watchlist management like multiselect remove or having a rearrangable order for saved movies and editing the user profile (password change, username change). 
