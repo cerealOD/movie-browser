@@ -12,6 +12,10 @@ Run `npm install` to build the project. The build artifacts will be stored in th
 
 Run `npm start` to run the dev server
 
+## Production
+
+The app is deployed on Netlify: https://movie-browser-showcase.netlify.app/
+
 ## Project Overview
 
 This frontend app makes requests to the respective [backend app](https://github.com/cerealOD/movie-backend) in order to fetch movies and movie information from [TMBD](https://www.themoviedb.org/). It then displays this information in several pages. There are 4 list pages which show popular/top rated/now playing/upcoming movies in a grid structure with pagination configured with PrimeNG paginator.
