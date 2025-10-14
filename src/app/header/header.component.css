@@ -13,7 +13,7 @@
 }
 
 .side-menu{
-  @apply fixed z-30 top-20 bg-secondary bg-opacity-30 h-full left-[-100%] w-[300px];
+  @apply fixed z-30 top-12 sm:top-20 bg-secondary bg-opacity-30 h-full left-[-100%] w-[300px];
   transition: left .2s ease 0s;
 }
 
@@ -22,15 +22,15 @@
 }
 
 .side-menu-link {
-  @apply text-white border-b border-solid border-white p-4 lg:px-8 font-semibold border-opacity-30 bg-white bg-opacity-0 hover:bg-opacity-10;
+  @apply text-white border-b border-solid border-white px-4 py-3 lg:px-8 sm:py-4  font-semibold border-opacity-30 bg-white bg-opacity-0 hover:bg-opacity-10;
 }
 
 .side-menu-link-auth {
-  @apply sm:hidden border-b border-solid border-white p-4 lg:px-8 font-semibold border-opacity-30 text-primary bg-secondary hover:bg-opacity-60;
+  @apply sm:hidden border-b border-solid border-white px-4 py-3 lg:px-8 sm:py-4  font-semibold border-opacity-30 text-primary bg-secondary hover:bg-opacity-60;
 }
 
 .side-menu-logout {
-  @apply text-white border-b border-solid border-white p-4 lg:px-8 font-semibold border-opacity-30 text-[#ff9c9c] cursor-pointer hover:bg-red-600 hover:bg-opacity-20;
+  @apply sm:hidden text-white border-b border-solid border-white px-4 py-3 lg:px-8 font-semibold border-opacity-30 text-[#ff9c9c] cursor-pointer hover:bg-red-600 hover:bg-opacity-20;
 }
 
 :host {
