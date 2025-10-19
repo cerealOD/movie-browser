@@ -13,7 +13,7 @@
 }
 
 .side-menu{
-  @apply fixed z-30 top-12 sm:top-20 bg-secondary bg-opacity-30 h-full left-[-100%] w-[300px];
+  @apply fixed z-30 top-16 sm:top-20 bg-secondary bg-opacity-30 h-full left-[-100%] w-[300px];
   transition: left .2s ease 0s;
 }
 
