@@ -97,6 +97,7 @@ export class CategoricalMoviesComponent implements OnInit {
         this.movies.set(response.results || []);
         this.totalRecords.set(response.total_results);
         this.currentPage.set(page);
+        window.scrollTo(0, 0);
       },
       error: (err: Error) => {
         console.error('Category movies fetch failed:', err);
