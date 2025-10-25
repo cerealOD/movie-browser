@@ -2,12 +2,8 @@ import { CanActivateFn, Router, Routes } from '@angular/router';
 
 import { inject } from '@angular/core';
 import { CategoricalMoviesComponent } from './movies/categorical-movies/categorical-movies.component';
-import { LoginComponent } from './auth/login/login.component';
-import { SignupComponent } from './auth/signup/signup.component';
 import { AuthService } from './services/auth.service';
 import { MovieShowComponent } from './movies/movie-show/movie-show.component';
-import { SearchResultsComponent } from './movies/search-results/search-results.component';
-import { FavoritesComponent } from './favorites/favorites.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 const authGuard: CanActivateFn = (route, state) => {

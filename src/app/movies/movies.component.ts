@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 
-import { IndexMovie } from '../models/indexMovie.model';
+import { IndexMovie } from '../models/index-movie.model';
 import { MovieComponent } from './movie/movie.component';
 
 @Component({

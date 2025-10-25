@@ -64,7 +64,7 @@ describe('HeaderComponent', () => {
   it('should not search when query is empty', () => {
     component.searchQuery = '   '; // empty after trim
     component.onSearch();
-    expect(router.navigate).not.toHaveBeenCalled;
+    expect(router.navigate).not.toHaveBeenCalled();
   });
 
   it('should navigate with correct search query', () => {
@@ -83,7 +83,9 @@ describe('HeaderComponent', () => {
   it('should close dropdown on outside click', () => {
     // setup fake dropdown element
     const fakeEl = document.createElement('div');
-    component.dropdownWrapper = { nativeElement: fakeEl } as any;
+    component.dropdownWrapper = { nativeElement: fakeEl } as {
+      nativeElement: HTMLDivElement;
+    };
 
     headerServiceSpy.dropdownOpen.and.returnValue(true);
     spyOn(fakeEl, 'contains').and.returnValue(false);

@@ -1,8 +1,10 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode, JwtPayload } from 'jwt-decode';
 import { MoviesService } from './movies.service';
+import { LoginResponse } from '../models/login-response.model';
+import { RegisterResponse } from '../models/register-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -24,9 +26,9 @@ export class AuthService {
     }
   }
 
-  register(username: string, password: string): Observable<any> {
+  register(username: string, password: string): Observable<RegisterResponse> {
     return this.http
-      .post(`${this.API_URL}/auth/register`, {
+      .post<RegisterResponse>(`${this.API_URL}/auth/register`, {
         username,
         password,
       })
@@ -37,15 +39,12 @@ export class AuthService {
       );
   }
 
-  login(username: string, password: string): Observable<any> {
+  login(username: string, password: string): Observable<LoginResponse> {
     return this.http
-      .post<{ token: string; user: { username: string } }>(
-        `${this.API_URL}/auth/login`,
-        {
-          username,
-          password,
-        }
-      )
+      .post<LoginResponse>(`${this.API_URL}/auth/login`, {
+        username,
+        password,
+      })
       .pipe(
         catchError((error) => {
           return throwError(() => error);
@@ -73,11 +72,12 @@ export class AuthService {
     if (!token) return false;
 
     try {
-      const decoded: any = jwtDecode(token);
+      const decoded = jwtDecode<JwtPayload>(token);
       // JWT exp is in s so get current time in s
       const currentTime = Date.now() / 1000;
-      return decoded.exp && decoded.exp > currentTime;
-    } catch (e) {
+      return typeof decoded.exp === 'number' && decoded.exp > currentTime;
+    } catch (error) {
+      console.error('Invalid token error: ', error);
       // invalid token
       return false;
     }

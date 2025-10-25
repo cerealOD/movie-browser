@@ -8,7 +8,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 
 import { Component } from '@angular/core';
-import { IndexMovie } from '../models/indexMovie.model';
+import { IndexMovie } from '../models/index-movie.model';
 
 @Component({
   template: `<app-movies [movies]="movies"></app-movies>`,

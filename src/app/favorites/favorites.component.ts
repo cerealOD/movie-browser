@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal, OnInit } from '@angular/core';
 import { MoviesComponent } from '../movies/movies.component';
 import { MoviesContainerComponent } from '../movies/movies-container/movies-container.component';
 import { MoviesService } from '../services/movies.service';
@@ -11,7 +11,7 @@ import { ToastService } from '../services/toast.service';
   templateUrl: './favorites.component.html',
   styleUrl: './favorites.component.css',
 })
-export class FavoritesComponent {
+export class FavoritesComponent implements OnInit {
   private fetchState = inject(FetchDataService);
   isFetching = this.fetchState.isFetching;
 

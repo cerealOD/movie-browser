@@ -1,10 +1,10 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MoviesService } from '../../services/movies.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IndexMovie } from '../../models/indexMovie.model';
+import { IndexMovie } from '../../models/index-movie.model';
 import { MoviesContainerComponent } from '../movies-container/movies-container.component';
 import { MoviesComponent } from '../movies.component';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { FetchDataService } from '../../services/fetch-state.service';
 import { ToastService } from '../../services/toast.service';
 
@@ -60,8 +60,8 @@ export class SearchResultsComponent implements OnInit {
     });
   }
 
-  loadPageFromPaginator(event: any) {
-    const page = event.page + 1;
+  loadPageFromPaginator(event: PaginatorState) {
+    const page = event.page! + 1;
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { page },

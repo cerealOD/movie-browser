@@ -7,15 +7,16 @@ import {
   signal,
 } from '@angular/core';
 
-import { IndexMovie } from '../../models/indexMovie.model';
+import { IndexMovie } from '../../models/index-movie.model';
 import { MoviesComponent } from '../movies.component';
 import { MoviesContainerComponent } from '../movies-container/movies-container.component';
 import { MoviesService } from '../../services/movies.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TitleizePipe } from '../../pipes/titleize.pipe';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { FetchDataService } from '../../services/fetch-state.service';
 import { ToastService } from '../../services/toast.service';
+import { MoviesResponse } from '../../models/movies-response.model';
 
 @Component({
   selector: 'app-popular-movies',
@@ -93,7 +94,7 @@ export class CategoricalMoviesComponent implements OnInit {
   private loadMoviesForPage(page: number) {
     this.isFetching.set(true);
     this.moviesService.loadCategoricalMovies(this.category(), page).subscribe({
-      next: (response: any) => {
+      next: (response: MoviesResponse) => {
         this.movies.set(response.results || []);
         this.totalRecords.set(response.total_results);
         this.currentPage.set(page);
@@ -120,8 +121,8 @@ export class CategoricalMoviesComponent implements OnInit {
     return Math.min(this.totalRecords(), maxPages * itemsPerPage);
   });
 
-  loadPageFromPaginator(event: any) {
-    const page = event.page + 1; // PrimeNG is zero based
+  loadPageFromPaginator(event: PaginatorState) {
+    const page = event.page! + 1; // PrimeNG is zero based
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { page },

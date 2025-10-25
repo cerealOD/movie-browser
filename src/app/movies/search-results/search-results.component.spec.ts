@@ -3,15 +3,15 @@ import { MoviesService } from '../../services/movies.service';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { SearchResultsComponent } from './search-results.component';
-import { IndexMovie } from '../../models/indexMovie.model';
+import { IndexMovie } from '../../models/index-movie.model';
 import { BehaviorSubject, of, throwError } from 'rxjs';
 import { ToastService } from '../../services/toast.service';
 
 const queryParamsSubject = new BehaviorSubject({ query: 'matrix', page: 2 });
 
-const activatedRouteStub = {
+const activatedRouteStub: Partial<ActivatedRoute> = {
   queryParams: queryParamsSubject.asObservable(),
-} as any;
+};
 
 const fakeResults: IndexMovie[] = [
   {

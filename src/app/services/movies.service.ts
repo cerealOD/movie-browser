@@ -1,12 +1,12 @@
 import { inject, Injectable, signal } from '@angular/core';
 
-import { IndexMovie } from '../models/indexMovie.model';
+import { IndexMovie } from '../models/index-movie.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { catchError, map, tap, throwError } from 'rxjs';
+import { catchError, tap, throwError } from 'rxjs';
 import { Movie } from '../models/movie.model';
-import { Cast } from '../models/cast.model';
-import { AuthService } from './auth.service';
+import { MoviesResponse } from '../models/movies-response.model';
+import { CastResponse } from '../models/cast-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -76,19 +76,19 @@ export class MoviesService {
       );
   }
 
-  loadCategoricalMovies(category: string, page: number = 1) {
+  loadCategoricalMovies(category: string, page = 1) {
     return this.fetchMovies(
       `${environment.apiUrl}/movies/${category}?page=${page}`
     );
   }
 
-  loadSimilarMovies(movieId: number, page: number = 1) {
+  loadSimilarMovies(movieId: number, page = 1) {
     return this.fetchMovies(
       `${environment.apiUrl}/movie/${movieId}/similar?page=${page}`
     );
   }
 
-  searchMovies(query: string, page: number = 1) {
+  searchMovies(query: string, page = 1) {
     return this.fetchMovies(
       `${environment.apiUrl}/movies/search?query=${query}&page=${page}`
     );
@@ -96,10 +96,7 @@ export class MoviesService {
 
   fetchCast(movieId: number) {
     return this.httpClient
-      .get<{
-        id: string;
-        cast: Cast[];
-      }>(`${environment.apiUrl}/movie/${movieId}/credits`)
+      .get<CastResponse>(`${environment.apiUrl}/movie/${movieId}/credits`)
       .pipe(
         catchError((error) => {
           return throwError(() => error);
@@ -118,17 +115,10 @@ export class MoviesService {
   }
 
   private fetchMovies(url: string) {
-    return this.httpClient
-      .get<{
-        page: number;
-        results: IndexMovie[];
-        total_pages: number;
-        total_results: number;
-      }>(url)
-      .pipe(
-        catchError((error) => {
-          return throwError(() => error);
-        })
-      );
+    return this.httpClient.get<MoviesResponse>(url).pipe(
+      catchError((error) => {
+        return throwError(() => error);
+      })
+    );
   }
 }

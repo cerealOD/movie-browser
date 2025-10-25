@@ -33,15 +33,15 @@ function equalValues(controlName1: string, controlName2: string) {
 })
 export class SignupComponent {
   form = new FormGroup({
-    username: new FormControl('', {
+    username: new FormControl<string>('', {
       validators: [Validators.required],
     }),
     passwords: new FormGroup(
       {
-        password: new FormControl('', {
+        password: new FormControl<string>('', {
           validators: [Validators.minLength(6), Validators.required],
         }),
-        confirmPassword: new FormControl('', {
+        confirmPassword: new FormControl<string>('', {
           validators: [Validators.minLength(6), Validators.required],
         }),
       },
@@ -60,7 +60,7 @@ export class SignupComponent {
     if (this.form.invalid) return;
 
     const username = this.form.value.username!;
-    const password = this.form.value.passwords?.password!;
+    const password = this.form.value.passwords!.password!;
 
     this.auth.register(username, password).subscribe({
       next: () => {

@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Router, Event, NavigationStart, NavigationEnd } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class ScrollPositionService {
   private positions = new Map<string, number>();
+  private router = inject(Router);
 
   //restore scroll position
-  constructor(private router: Router) {
+  constructor() {
     let lastUrl: string | null = null;
 
     this.router.events.subscribe((event: Event) => {

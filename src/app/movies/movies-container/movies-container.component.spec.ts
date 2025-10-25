@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
   imports: [MoviesContainerComponent],
 })
 class TestHostComponent {
-  title: string = 'Title';
+  title = 'Title';
 }
 
 describe('MovieComponent', () => {

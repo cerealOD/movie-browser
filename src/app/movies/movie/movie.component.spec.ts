@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MoviesService } from '../../services/movies.service';
-import { provideRouter, Router } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { MovieComponent } from './movie.component';
-import { IndexMovie } from '../../models/indexMovie.model';
-import { Component } from '@angular/core';
+import { IndexMovie } from '../../models/index-movie.model';
+import { Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { of, Subject } from 'rxjs';
+import { of } from 'rxjs';
 
 @Component({
   template: `<app-movie [movie]="testMovie"></app-movie>`,
@@ -28,7 +28,7 @@ describe('MovieComponent (Host)', () => {
   let moviesServiceSpy: jasmine.SpyObj<MoviesService>;
   let hostFixture: ComponentFixture<TestHostComponent>;
   let hostComponent: TestHostComponent;
-  let movieDebugEl: any;
+  let movieDebugEl: DebugElement;
 
   beforeEach(async () => {
     moviesServiceSpy = jasmine.createSpyObj('MoviesService', [

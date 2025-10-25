@@ -1,15 +1,23 @@
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  signal,
+  OnInit,
+} from '@angular/core';
 import { MoviesService } from '../../services/movies.service';
 import { Movie } from '../../models/movie.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { IndexMovie } from '../../models/indexMovie.model';
+import { IndexMovie } from '../../models/index-movie.model';
 import { Cast } from '../../models/cast.model';
 import { MovieComponent } from '../movie/movie.component';
 import { AuthService } from '../../services/auth.service';
 import { FetchDataService } from '../../services/fetch-state.service';
 import { ToastService } from '../../services/toast.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CastResponse } from '../../models/cast-response.model';
 
 @Component({
   selector: 'app-movie-show',
@@ -17,7 +25,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './movie-show.component.html',
   styleUrl: './movie-show.component.css',
 })
-export class MovieShowComponent {
+export class MovieShowComponent implements OnInit {
   movieId = signal<number>(0);
   movie = signal<Movie | undefined>(undefined);
   similars = signal<IndexMovie[] | undefined>([]);
@@ -91,7 +99,7 @@ export class MovieShowComponent {
 
   private fetchCast(movieId: number) {
     this.moviesService.fetchCast(movieId).subscribe({
-      next: (res) => {
+      next: (res: CastResponse) => {
         this.cast.set(
           // only get cast with existing profile picture
           res.cast.filter((value) => value.profile_path).slice(0, 12)

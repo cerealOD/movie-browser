@@ -5,6 +5,7 @@ import {
   HostListener,
   inject,
   ViewChild,
+  OnInit,
 } from '@angular/core';
 import {
   NavigationEnd,
@@ -25,7 +26,7 @@ import { filter } from 'rxjs';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   @ViewChild('dropdownWrapper') dropdownWrapper!: ElementRef;
   @ViewChild('sideMenu') sideMenu!: ElementRef;
   auth = inject(AuthService);

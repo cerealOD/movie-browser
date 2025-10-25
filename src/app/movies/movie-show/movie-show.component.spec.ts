@@ -6,9 +6,11 @@ import { convertToParamMap, provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { Movie } from '../../models/movie.model';
-import { IndexMovie } from '../../models/indexMovie.model';
+import { IndexMovie } from '../../models/index-movie.model';
 import { computed } from '@angular/core';
 import { ToastService } from '../../services/toast.service';
+import { MoviesResponse } from '../../models/movies-response.model';
+import { CastResponse } from '../../models/cast-response.model';
 
 describe('MovieShowComponent', () => {
   let component: MovieShowComponent;
@@ -55,9 +57,16 @@ describe('MovieShowComponent', () => {
 
     moviesServiceSpy.fetchMovie.and.returnValue(of(fakeMovie));
     moviesServiceSpy.loadSimilarMovies.and.returnValue(
-      of({ results: [] } as any)
+      of({
+        page: 1,
+        results: [],
+        total_pages: 1,
+        total_results: 0,
+      } as MoviesResponse)
     );
-    moviesServiceSpy.fetchCast.and.returnValue(of({ cast: [] } as any));
+    moviesServiceSpy.fetchCast.and.returnValue(
+      of({ cast: [] } as CastResponse)
+    );
     moviesServiceSpy.addMovieToUserFavorites.and.returnValue(of({}));
     moviesServiceSpy.removeMovieFromUserFavorites.and.returnValue(of({}));
     moviesServiceSpy.isFavorite.and.returnValue(false);

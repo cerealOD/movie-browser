@@ -37,7 +37,7 @@ export class LoginComponent {
     const password = this.form.value.password!;
 
     this.auth.login(username, password).subscribe({
-      next: (res) => {
+      next: () => {
         this.headerService.close();
         this.router.navigate(['/']);
         this.toast.show('Login successful!', 'success');

@@ -12,7 +12,6 @@ describe('FavoritesComponent', () => {
   let fixture: ComponentFixture<FavoritesComponent>;
   let moviesServiceSpy: jasmine.SpyObj<MoviesService>;
   let toastServiceSpy: jasmine.SpyObj<ToastService>;
-  let fetchDataService: FetchDataService;
 
   const fakeMovies = [
     {
@@ -55,8 +54,6 @@ describe('FavoritesComponent', () => {
         FetchDataService,
       ],
     }).compileComponents();
-
-    fetchDataService = TestBed.inject(FetchDataService);
   });
 
   function createComponent() {

@@ -6,9 +6,10 @@ import {
   inject,
   input,
   signal,
+  OnInit,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { IndexMovie } from '../../models/indexMovie.model';
+import { IndexMovie } from '../../models/index-movie.model';
 import { MoviesService } from '../../services/movies.service';
 import { FetchDataService } from '../../services/fetch-state.service';
 import { ToastService } from '../../services/toast.service';
@@ -19,7 +20,7 @@ import { ToastService } from '../../services/toast.service';
   templateUrl: './movie.component.html',
   styleUrl: './movie.component.css',
 })
-export class MovieComponent {
+export class MovieComponent implements OnInit {
   movie = input.required<IndexMovie>();
   currentRoute = signal<string | undefined>('');
 
