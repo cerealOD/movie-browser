@@ -6,6 +6,8 @@ import { ToastService } from '../../services/toast.service';
 import { HeaderService } from '../../services/header.service';
 import { of, throwError } from 'rxjs';
 import { provideRouter, Router } from '@angular/router';
+import { RegisterResponse } from '../../models/register-response.model';
+import { LoginResponse } from '../../models/login-response.model';
 
 describe('SignupComponent', () => {
   let component: SignupComponent;
@@ -50,8 +52,10 @@ describe('SignupComponent', () => {
   });
 
   it('should call register and login, then close header, navigate, and show success toast', () => {
-    authServiceSpy.register.and.returnValue(of({}));
-    authServiceSpy.login.and.returnValue(of({ token: 'fake' }));
+    authServiceSpy.register.and.returnValue(of({} as RegisterResponse));
+    authServiceSpy.login.and.returnValue(
+      of({ token: 'fake' } as LoginResponse)
+    );
 
     component.form.setValue({
       username: 'testuser',
@@ -101,7 +105,7 @@ describe('SignupComponent', () => {
   });
 
   it('should handle login error after successful register', () => {
-    authServiceSpy.register.and.returnValue(of({}));
+    authServiceSpy.register.and.returnValue(of({} as RegisterResponse));
     const mockError = new Error('Login failed');
     authServiceSpy.login.and.returnValue(throwError(() => mockError));
 

@@ -6,6 +6,7 @@ import { HeaderService } from '../../services/header.service';
 import { ToastService } from '../../services/toast.service';
 import { of, throwError } from 'rxjs';
 import { provideRouter, Router } from '@angular/router';
+import { LoginResponse } from '../../models/login-response.model';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -49,7 +50,9 @@ describe('LoginComponent', () => {
 
   it('should call AuthService.login(), close header, navigate, and show success toast', () => {
     component.form.setValue({ username: 'test', password: '123456' });
-    authServiceSpy.login.and.returnValue(of({ token: 'fake-jwt' }));
+    authServiceSpy.login.and.returnValue(
+      of({ token: 'fake-jwt' } as LoginResponse)
+    );
 
     component.onSubmit();
 
