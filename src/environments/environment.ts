@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: (window as any)['__env']?.apiUrl || 'http://localhost:5000/api',
+  apiUrl: 'http://localhost:5000/api',
 };

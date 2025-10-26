@@ -5,13 +5,14 @@ import { jwtDecode, JwtPayload } from 'jwt-decode';
 import { MoviesService } from './movies.service';
 import { LoginResponse } from '../models/login-response.model';
 import { RegisterResponse } from '../models/register-response.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
   private moviesService = inject(MoviesService);
 
-  private API_URL = (window as any).__env?.apiUrl || 'http://localhost:5000';
+  private API_URL = environment.apiUrl;
 
   private loggedIn = new BehaviorSubject<boolean>(this.isLoggedIn());
   isLoggedIn$ = this.loggedIn.asObservable();

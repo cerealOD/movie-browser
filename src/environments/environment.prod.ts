@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: (window as any)['__env']?.apiUrl,
+  apiUrl: 'https://movie-backend-agbc.onrender.com/api',
 };
