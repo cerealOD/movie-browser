@@ -135,7 +135,7 @@ describe('MovieShowComponent', () => {
     authServiceSpy.isLoggedIn.and.returnValue(true);
     moviesServiceSpy.isFavorite.and.returnValue(true);
 
-    // Force signal to recompute
+    // force signal to recompute
     component.isFavorite = computed(() =>
       authServiceSpy.isLoggedIn()
         ? moviesServiceSpy.isFavorite(component.movie()?.id ?? -1)

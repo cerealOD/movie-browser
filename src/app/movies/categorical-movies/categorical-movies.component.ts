@@ -55,7 +55,7 @@ export class CategoricalMoviesComponent implements OnInit {
 
         const pageParam = Number(this.route.snapshot.queryParamMap.get('page'));
         if (!pageParam || pageParam < 1) {
-          // Reset page to 1 in URL
+          // reset page to 1 in URL
           this.router.navigate([], {
             relativeTo: this.route,
             queryParams: { page: 1 },
@@ -65,14 +65,14 @@ export class CategoricalMoviesComponent implements OnInit {
       }
     });
 
-    // Watch page query param
+    // watch page query param
     const pageSub = this.route.queryParamMap.subscribe((qparams) => {
       const page = Number(qparams.get('page')) || 1;
 
-      // Only load if category is set
+      // only load if category is set
       if (!this.category()) return;
 
-      // Avoid double load if page/category didn't change
+      // avoid double load if page/category didn't change
       if (
         this.lastLoadedCategory === this.category() &&
         this.lastLoadedPage === page
@@ -114,7 +114,7 @@ export class CategoricalMoviesComponent implements OnInit {
     });
   }
 
-  // Needed because of tmdb api, it returns max 500 pages
+  // needed because of tmdb api, it returns max 500 pages
   cappedTotalRecords = computed(() => {
     const itemsPerPage = 20;
     const maxPages = 500;
@@ -122,7 +122,7 @@ export class CategoricalMoviesComponent implements OnInit {
   });
 
   loadPageFromPaginator(event: PaginatorState) {
-    const page = event.page! + 1; // PrimeNG is zero based
+    const page = event.page! + 1; // primeNG is zero based
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { page },
