@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MoviesService } from '../../services/movies.service';
 import { Movie } from '../../models/movie.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { DatePipe, DecimalPipe, ViewportScroller } from '@angular/common';
 import { IndexMovie } from '../../models/index-movie.model';
 import { Cast } from '../../models/cast.model';
@@ -18,6 +18,7 @@ import { FetchDataService } from '../../services/fetch-state.service';
 import { ToastService } from '../../services/toast.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CastResponse } from '../../models/cast-response.model';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-movie-show',
@@ -48,12 +49,21 @@ export class MovieShowComponent implements OnInit {
   userFavorites = this.moviesService.loadedUserFavorites;
 
   ngOnInit() {
-    this.viewportScroller.scrollToPosition([0, 0]);
+    this.router.events
+      .pipe(filter((e) => e instanceof NavigationEnd))
+      .subscribe(() => {
+        const nav = this.router.currentNavigation();
+        if (!nav) return;
+
+        if (nav.trigger === 'imperative') {
+          // if we click on similar movie, start on top
+          this.viewportScroller.scrollToPosition([0, 0]);
+        }
+        // otherwise, if we go back, restore scroll state
+      });
     const movieIdSub = this.route.paramMap.subscribe((params) => {
       this.movieId.set(parseInt(params.get('id') || ''));
       this.fetchMovie(this.movieId());
-      this.fetchSimilars(this.movieId());
-      this.fetchCast(this.movieId());
     });
     this.destroyRef.onDestroy(() => {
       movieIdSub.unsubscribe();
@@ -80,22 +90,7 @@ export class MovieShowComponent implements OnInit {
         this.isFetching.set(false);
       },
       complete: () => {
-        this.isFetching.set(false);
-      },
-    });
-  }
-
-  private fetchSimilars(movieId: number) {
-    this.moviesService.loadSimilarMovies(movieId).subscribe({
-      next: (res) => {
-        this.similars.set(res.results.slice(0, 12));
-      },
-      error: (err: Error) => {
-        console.error('Similar movies fetch failed:', err);
-        this.toast.show(
-          'Failed to load similar movies. Please try again later.',
-          'error'
-        );
+        this.fetchCast(this.movieId());
       },
     });
   }
@@ -114,6 +109,29 @@ export class MovieShowComponent implements OnInit {
           'Failed to load cast. Please try again later.',
           'error'
         );
+        this.isFetching.set(false);
+      },
+      complete: () => {
+        this.fetchSimilars(this.movieId());
+      },
+    });
+  }
+
+  private fetchSimilars(movieId: number) {
+    this.moviesService.loadSimilarMovies(movieId).subscribe({
+      next: (res) => {
+        this.similars.set(res.results.slice(0, 12));
+      },
+      error: (err: Error) => {
+        console.error('Similar movies fetch failed:', err);
+        this.toast.show(
+          'Failed to load similar movies. Please try again later.',
+          'error'
+        );
+        this.isFetching.set(false);
+      },
+      complete: () => {
+        this.isFetching.set(false);
       },
     });
   }
