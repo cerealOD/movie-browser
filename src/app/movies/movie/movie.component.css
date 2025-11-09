@@ -1,0 +1,15 @@
+.movie-item {
+  @apply block text-white rounded-2xl transition-all duration-300 ease-[cubic-bezier(0.165,0.84,0.44,1)] transform hover:scale-[1.03];
+}
+
+.movie-figure {
+  @apply relative pb-[145%] rounded-xl overflow-hidden shadow-[0_0_25px_rgba(0,0,0,0.4)] transition-all duration-300 ease-[cubic-bezier(0.165,0.84,0.44,1)] group-hover:shadow-[0_2px_35px_rgba(216,198,238,0.3)] group-hover:-translate-y-1;
+}
+
+.movie-img {
+  @apply absolute w-full h-full object-cover rounded-xl transition-transform duration-500 ease-[cubic-bezier(0.165,0.84,0.44,1)] group-hover:scale-105 group-hover:brightness-110;
+}
+
+.movie-overlay {
+  @apply absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500;
+}

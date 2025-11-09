@@ -36,7 +36,7 @@
       </div>
     </div>
     <div class="flex items-center gap-x-8">
-      <form (ngSubmit)="onSearch()" class="hidden md:flex w-auto lg:w-[350px] xl:w-auto 2xl:w-[350px] items-center">
+      <form (ngSubmit)="onSearch()" class="hidden md:flex w-auto lg:w-[350px] xl:w-auto 2xl:w-[350px] items-center focus-within:shadow-[0_1px_15px_rgba(216,198,238,0.65)] transition-all rounded-xl">
         <input
           type="text"
           [(ngModel)]="searchQuery"

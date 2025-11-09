@@ -114,7 +114,7 @@ export class CategoricalMoviesComponent implements OnInit {
     });
   }
 
-  // needed because of tmdb api, it returns max 500 pages
+  // Needed because of tmdb api, it returns max 500 pages
   cappedTotalRecords = computed(() => {
     const itemsPerPage = 20;
     const maxPages = 500;
