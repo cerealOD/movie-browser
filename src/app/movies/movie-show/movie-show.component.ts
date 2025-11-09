@@ -9,7 +9,7 @@ import {
 import { MoviesService } from '../../services/movies.service';
 import { Movie } from '../../models/movie.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe, ViewportScroller } from '@angular/common';
 import { IndexMovie } from '../../models/index-movie.model';
 import { Cast } from '../../models/cast.model';
 import { MovieComponent } from '../movie/movie.component';
@@ -42,10 +42,13 @@ export class MovieShowComponent implements OnInit {
   private router = inject(Router);
   private toast = inject(ToastService);
 
+  private viewportScroller = inject(ViewportScroller);
+
   // pull favorites as readonly signal
   userFavorites = this.moviesService.loadedUserFavorites;
 
   ngOnInit() {
+    this.viewportScroller.scrollToPosition([0, 0]);
     const movieIdSub = this.route.paramMap.subscribe((params) => {
       this.movieId.set(parseInt(params.get('id') || ''));
       this.fetchMovie(this.movieId());
