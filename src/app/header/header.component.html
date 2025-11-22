@@ -36,17 +36,49 @@
       </div>
     </div>
     <div class="flex items-center gap-x-8">
-      <form (ngSubmit)="onSearch()" class="hidden md:flex w-auto lg:w-[350px] xl:w-auto 2xl:w-[350px] items-center focus-within:shadow-[0_1px_15px_rgba(216,198,238,0.65)] transition-all rounded-xl">
+      <form (ngSubmit)="onSearch()" class="hidden md:flex relative w-auto lg:w-[350px] xl:w-auto 2xl:w-[350px] items-center focus-within:shadow-[0_1px_15px_rgba(216,198,238,0.65)] transition-all rounded-xl">
         <input
           type="text"
           [(ngModel)]="searchQuery"
           name="search"
           placeholder="Search movies..."
+          (ngModelChange)="onSearchChange($event)"
+          (click)="openSuggestions()"
           class="bg-white placeholder:italic px-3 py-2 h-10 rounded-l-xl focus:outline-none text-primary flex-1 min-h-0"
+          #searchBar
         />
         <button type="submit" class="bg-secondary text-primary flex items-center w-10 h-10 flex-none justify-center rounded-r-xl">
           <i class="pi pi-search font-semibold"></i>
         </button>
+        @if(showSuggestions() && suggestions()?.length) {
+          <div
+          class="absolute top-full mt-2 left-0 right-0 bg-secondary rounded-b-xl shadow-lg z-50 max-h-80 overflow-y-auto scrollbar scrollbar-sidebar"
+        >
+          <ul>
+            @for (movie of suggestions(); track movie.id) {
+              <li
+              >
+                <button (click)="goToMovie(movie.id)" class="live-result">
+                  <img
+                    class="w-8 h-12 object-cover rounded"
+                    [src]="movie.poster_path ? 'https://image.tmdb.org/t/p/w500' + movie.poster_path : 'placeholder.png'"
+                    [alt]="movie.poster_path ? movie.title + ' poster' : 'No poster available'"
+                    loading="lazy"
+                  />
+                  <div class="flex flex-col text-start">
+                    <span class="live-result-title">
+                      {{ movie.title }}
+                    </span>
+                    <span class="live-result-subtitle">
+                      {{ movie.release_date | date : 'yyyy' }}
+                    </span>
+                  </div>
+                </button>
+              </li>
+            }
+          </ul>
+        </div>
+        }
       </form>
     @if (auth.isLoggedIn$ | async; ) {
       <div class="hidden sm:block relative" #dropdownWrapper>

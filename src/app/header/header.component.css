@@ -1,3 +1,7 @@
+:host {
+  @apply sticky top-0 z-30 ;
+}
+
 .nav-link {
   @apply font-medium text-white rounded-lg px-3 py-1 transition-basic;
 }
@@ -33,6 +37,37 @@
   @apply sm:hidden text-white border-b border-solid border-white px-4 py-3 lg:px-8 font-semibold border-opacity-30 text-[#ff9c9c] cursor-pointer hover:bg-red-600 hover:bg-opacity-20;
 }
 
-:host {
-  @apply sticky top-0 z-30 ;
+.live-result {
+  @apply px-3 py-2 flex items-center gap-3 cursor-pointer hover:bg-primary hover:bg-opacity-85 hover:text-white w-full transition-all;
+}
+
+.live-result-title {
+  @apply text-sm font-montserrat font-medium text-gray-900 transition-all;
+}
+
+.live-result-subtitle {
+  @apply text-xs text-gray-900 !text-opacity-50 transition-all;
+}
+
+.live-result:hover {
+  .live-result-title {
+    @apply !text-white
+  }
+  .live-result-subtitle {
+    @apply !text-white !text-opacity-60;
+  }
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-sidebar::-webkit-scrollbar-thumb {
+  background-color: rgb(99 99 99 / var(--tw-bg-opacity, 1));
+  --tw-bg-opacity: 1;
+  border-radius: 9999px;
 }
