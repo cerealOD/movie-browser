@@ -4,12 +4,14 @@ import { AuthService } from '../services/auth.service';
 import { provideRouter, Router } from '@angular/router';
 
 import { HeaderComponent } from './header.component';
+import { MoviesService } from '../services/movies.service';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
   let headerServiceSpy: jasmine.SpyObj<HeaderService>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let moviesServiceSpy: jasmine.SpyObj<MoviesService>;
   let router: Router;
 
   beforeEach(async () => {
@@ -22,6 +24,7 @@ describe('HeaderComponent', () => {
       'isMenuOpen',
       'toggleMenu',
     ]);
+    moviesServiceSpy = jasmine.createSpyObj('MoviesService', ['searchMovies']);
 
     authServiceSpy.user.and.returnValue({ username: 'alice' }); //mock user signal
     headerServiceSpy.dropdownOpen.and.returnValue(false);
@@ -32,6 +35,7 @@ describe('HeaderComponent', () => {
         provideRouter([]),
         { provide: AuthService, useValue: authServiceSpy },
         { provide: HeaderService, useValue: headerServiceSpy },
+        { provide: MoviesService, useValue: moviesServiceSpy },
       ],
     }).compileComponents();
 
